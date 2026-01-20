@@ -1,0 +1,100 @@
+/* App.css  */
+ .container {
+     max-width: 1200px;
+     width: 95%;
+     margin: 0 auto;
+     padding: 20px 24px;
+     background-color: #F5EEE6;
+     color: #222; /* default text color for better contrast */
+ }
+
+
+ nav {
+     background-color: #00a7aa;
+     padding: 10px;
+     border-radius: 10px;
+ }
+
+ ul {
+     list-style: none;
+     padding: 0;
+     margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+ }
+
+ li {
+     margin-right: 20px;
+ }
+
+nav ul li a {
+    display:inline-block;
+    padding: 8px 12px;
+    border-radius:6px;
+}
+
+@media (max-width: 480px) {
+    nav ul { gap:8px }
+    nav { padding:8px }
+}
+
+ a {
+
+     text-decoration: none;
+     color: white;
+     font-weight: bold;
+ }
+
+ a:hover {
+     color: #ffd700;
+ }
+
+ .active {
+
+     color: #ffd700;
+ }
+
+ /* FLEX  */
+ .flex-column {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+ }
+
+ .flex-row {
+     display: flex;
+     flex-wrap: wrap;
+     flex-direction: row;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+/* form controls: ensure white background and dark text for readability */
+input, select, textarea {
+    background: #fff;
+    color: #222;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px 10px;
+}
+input::placeholder, textarea::placeholder { color: #777 }
+input:focus, select:focus, textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(0,123,255,0.12) }
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+    .container { padding: 16px; }
+    nav { border-radius: 6px; }
+    ul { gap: 8px; }
+    .flex-row { flex-direction: column; align-items: stretch; }
+}
+
+@media (max-width: 480px) {
+    .container { padding: 12px; }
+    h1 { font-size: 1.6rem; }
+}
+
+/* Ensure headings and section labels are visible on light background */
+h1, h2, h3, h4, p, label { color: #222; }
+
+.nav-link { color: white; }

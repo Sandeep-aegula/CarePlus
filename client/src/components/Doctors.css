@@ -1,0 +1,95 @@
+/* /src/components/Doctors.css  */
+
+.main-doc-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.doctors-section {
+    width: 48%;
+    min-height: 200px;
+    text-align: center;
+}
+
+/* Add the doctor card styles */
+.doctor-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+
+}
+
+.doctor-card:hover { transform: scale(1.02); }
+.doctor-card p { margin: 0; color: #222 }
+.doctor-card button { margin-top: 8px; cursor: pointer }
+
+.doctor-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    align-items: start;
+}
+
+.doctors-section { padding: 8px }
+
+/* Add the form section styles */
+
+.form-sections {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 16px;
+    width: 48%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.form-sections h4 { margin-bottom: 12px; text-align: center }
+
+.form-sections form { display:flex; flex-direction:column }
+.form-sections label { margin-bottom:6px }
+.form-sections input { padding:8px; margin-bottom:12px; background:#fff; color:#222; border:1px solid #ddd }
+.form-sections button { align-self:flex-start; padding:8px; background:#007bff; color:#fff; border:none; border-radius:4px }
+.form-sections button:hover { background:#0056b3 }
+
+/* Doctor form layout */
+.doctor-form { width:100% }
+.doctor-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px }
+.field { display:flex; flex-direction:column }
+.field label { font-weight:600; margin-bottom:6px; color:#222 }
+.field input { padding:10px; border-radius:6px; border:1px solid #ddd; background:#fff; color:#222 }
+.form-actions { display:flex; gap:10px; margin-top:12px }
+.form-actions .primary { background:#007bff; color:#fff; border:none; padding:10px 14px; border-radius:6px }
+.form-actions .muted { background:transparent; color:#444; border:1px solid #ddd; padding:8px 12px; border-radius:6px }
+
+@media (max-width:760px) {
+    .doctor-grid { grid-template-columns: 1fr }
+}
+
+button {
+    margin-top: 8px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+
+    &amp;:hover {
+        background-color: #0056b3;
+    }
+}
+
+.btn-container { display:flex; justify-content:space-between; width:100% }
+
+@media (max-width: 900px) {
+    .form-sections, .doctors-section { width: 100%; }
+    .main-doc-container { flex-direction: column; }
+}

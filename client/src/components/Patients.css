@@ -1,0 +1,40 @@
+/* /src/components/Patients.css  */
+
+.patient-main { display:flex; gap:16px; flex-wrap:wrap }
+.form-sections { width:48%; margin-right:0; min-height:120px }
+.patients-section { width:48% }
+.patient-card { background:#fff; border:1px solid #eee; border-radius:8px; padding:14px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.06); transition:transform .18s ease }
+.patient-card:hover { transform: translateY(-2px) }
+.patient-card h4 { margin-bottom:8px }
+.patient-card p { margin:6px 0 }
+.form-sections input { background:#fff; color:#222; border:1px solid #ddd; padding:8px }
+.patient-card button { margin-top:8px; background:#007bff; color:#fff; border:none; border-radius:4px; padding:8px }
+.patient-card button:hover { background:#0056b3 }
+
+@media (max-width:900px) {
+  .form-sections, .patients-section { width:100% }
+  .patient-main { flex-direction:column }
+}
+
+.patient-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.patients-section { padding:8px }
+
+/* Patient form styles */
+.patient-form { width:100% }
+.patient-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px }
+.patient-form .field { display:flex; flex-direction:column }
+.patient-form .field label { font-weight:600; margin-bottom:6px; color:#222 }
+.patient-form .field input, .patient-form .field select { padding:10px; border-radius:6px; border:1px solid #ddd; background:#fff; color:#222 }
+.patient-form .field input[type="number"] { -moz-appearance: textfield }
+.patient-form .form-actions { display:flex; gap:10px; margin-top:12px }
+.patient-form .primary { background:#007bff; color:#fff; border:none; padding:10px 14px; border-radius:6px }
+.patient-form .muted { background:transparent; color:#444; border:1px solid #ddd; padding:8px 12px; border-radius:6px }
+
+@media (max-width:760px) {
+  .patient-grid { grid-template-columns: 1fr }
+}

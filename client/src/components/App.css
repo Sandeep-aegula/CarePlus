@@ -1,0 +1,79 @@
+/* /src/components/App  */
+/* Appointment card  */
+.appointment-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 360px;
+    padding: 16px;
+    margin: 12px 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.3s ease, transform 0.15s ease;
+}
+
+.appointment-card:hover { box-shadow: 0 0 14px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.appointment-card p { font-size: 16px; margin-bottom: 10px; }
+.appointment-card p span { font-weight: 700; }
+.appointment-card button { background-color:#007bff; color:#fff; border:none; padding:8px 12px; margin-right:8px; cursor:pointer; border-radius:4px }
+.appointment-card button:hover { background-color:#0056b3 }
+/* Add this to a new CSS file, e.g., AppointmentForm.css */
+.appointment-form {
+    max-width: 480px;
+    width: 100%;
+    margin: 8px auto 24px auto;
+    padding: 18px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.appointment-form h4 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.appointment-form label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.appointment-form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.appointment-form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &amp;:hover {
+        background-color: #0056b3;
+    }
+}
+
+
+.appointments {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 720px;
+    margin-left: 18px;
+}
+
+.add-form { display:flex; flex-direction:column; align-items:flex-start; margin-bottom:24px; }
+
+@media (max-width: 900px) {
+  .appointments { margin-left: 0; max-width: 100%; }
+  .appointment-form { margin: 12px 8px; }
+}

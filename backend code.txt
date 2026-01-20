@@ -1,0 +1,355 @@
+// server.js
+
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const patientsRouter = require('./routes/patients');
+const doctorsRouter = require('./routes/doctors');
+const appoinmentsRouter = require('./routes/appointments')
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+app.use(cors());
+app.use(bodyParser.json());
+
+// Connect to MongoDB
+mongoose.connect(
+    'mongodb://localhost:27017/hospital',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+const connection = mongoose.connection;
+connection.once('open', () =&gt; {
+    console.log('MongoDB database connection established successfully');
+});
+
+app.use('/patients', patientsRouter);
+app.use('/doctors', doctorsRouter);
+app.use('/appointments', appoinmentsRouter)
+
+app.listen(PORT, () =&gt; {
+    console.log(`Server is running on port ${PORT}`);
+});
+// routes/patients.js
+
+const express = require('express');
+const router = express.Router();
+const Patient = require('../models/Patient');
+
+// Get all patients
+router.route('/').get((req, res) =&gt; {
+    Patient.find()
+        .then(patients =&gt;
+            res.json(patients))
+        .catch(err =&gt;
+            res.status(400)
+                .json('Error: ' + err));
+});
+
+// Add new patient
+router.route('/add')
+    .post((req, res) =&gt; {
+        const { name, age, gender } = req.body;
+
+        const newPatient =
+            new Patient({ name, age, gender });
+
+        newPatient.save()
+            .then(savedPatient =&gt;
+                res.json(savedPatient))
+            .catch(err =&gt; res.status(400)
+                .json('Error: ' + err));
+    });
+
+// Update patient data
+router.route('/update/:id')
+    .post((req, res) =&gt; {
+        console.log('hihhhhiuhiihihiuhiuh');
+
+        Patient.findById(req.params.id)
+            .then(patient =&gt; {
+                if (!patient) {
+                    return res.status(404)
+                        .json('Patient not found');
+                }
+
+                patient.name = req.body.name;
+                patient.age = req.body.age;
+                patient.gender = req.body.gender;
+
+                patient.save()
+                    .then(() =&gt; res.json('Patient updated!'))
+                    .catch(err =&gt; res.status(400)
+                        .json('Error: ' + err));
+            })
+            .catch(err =&gt; res.status(400)
+                .json('Error: ' + err));
+    });
+
+// Delete patient by ID
+router.route('/delete/:id')
+    .delete((req, res) =&gt; {
+        Patient.findByIdAndDelete(req.params.id)
+            .then(patient =&gt; {
+                if (!patient) {
+                    return res.status(404)
+                        .json('Patient not found');
+                }
+                res.json('Patient deleted!');
+            })
+            .catch(err =&gt; res.status(400)
+                .json('Error: ' + err));
+    });
+
+module.exports = router;
+// routes/appointments.js
+
+const express = require('express');
+const router = express.Router();
+const Appointment =
+    require('../models/Appointment');
+
+// Get all appointments
+router.route('/').get((req, res) =&gt; {
+    Appointment.find()
+        .then(appointments =&gt;
+            res.json(appointments))
+        .catch(err =&gt;
+            res.status(400).json('Error: ' + err));
+});
+
+// Add new appointment
+router.route('/add').post((req, res) =&gt; {
+    const { patientName, doctorName, date } = req.body;
+    const newAppointment =
+        new Appointment({ patientName, doctorName, date });
+
+    newAppointment.save()
+        .then(savedAppointment =&gt; res.json(savedAppointment))
+        .catch(err =&gt; res.status(400).json('Error: ' + err));
+});
+
+// Update appointment data
+router.route('/update/:id').post((req, res) =&gt; {
+    Appointment.findById(req.params.id)
+        .then(appointment =&gt; {
+            appointment.patientName =
+                req.body.patientName;
+            appointment.doctorName =
+                req.body.doctorName;
+            appointment.date =
+                req.body.date;
+
+            appointment.save()
+                .then(
+                    () =&gt;
+                        res.json('Appointment updated!'))
+                .catch(
+                    err =&gt; res.status(400)
+                        .json('Error: ' + err));
+        })
+        .catch(
+            err =&gt; res.status(400)
+                .json('Error: ' + err));
+});
+
+// Delete appointment
+router.route('/delete/:id')
+    .delete((req, res) =&gt; {
+        Appointment.findByIdAndDelete(req.params.id)
+            .then(
+                () =&gt; res
+                    .json('Appointment deleted.'))
+            .catch(
+                err =&gt; res
+                    .status(400).json('Error: ' + err));
+    });
+
+module.exports = router;
+// routes/doctors.js
+
+const express = require('express');
+const router = express.Router();
+const Doctor = require('../models/Doctor');
+
+// Get all doctors
+router.route('/').get((req, res) =&gt; {
+    Doctor.find()
+        .then(doctors =&gt;
+            res.json(doctors))
+        .catch(err =&gt;
+            res.status(400)
+                .json('Error: ' + err));
+});
+
+// Add new doctor
+router.route('/add')
+    .post((req, res) =&gt; {
+        const { name, specialty } = req.body;
+
+        const newDoctor =
+            new Doctor({ name, specialty });
+
+        newDoctor.save()
+            // Return the savedDoctor object
+            .then(savedDoctor =&gt;
+                res.json(savedDoctor))
+            .catch(
+                err =&gt;
+                    res.status(400)
+                        .json('Error: ' + err));
+    });
+
+
+// Update doctor data
+router.route('/update/:id')
+    .post((req, res) =&gt; {
+        Doctor.findById(req.params.id)
+            .then(doctor =&gt; {
+                if (!doctor) {
+                    return res.status(404)
+                        .json('Doctor not found');
+                }
+
+                doctor.name = req.body.name;
+                doctor.specialty = req.body.specialty;
+
+                doctor.save()
+                    .then(() =&gt; res.json('Doctor updated!'))
+                    .catch(err =&gt; res.status(400)
+                        .json('Error: ' + err));
+            })
+            .catch(err =&gt; res.status(400)
+                .json('Error: ' + err));
+    });
+
+// Delete doctor by ID
+router.route('/delete/:id').delete((req, res) =&gt; {
+    Doctor.findByIdAndDelete(req.params.id)
+        .then(doctor =&gt; {
+            if (!doctor) {
+                return res.status(404)
+                    .json('Doctor not found');
+            }
+            res.json('Doctor deleted!');
+        })
+        .catch(err =&gt; res.status(400)
+            .json('Error: ' + err));
+});
+
+module.exports = router;
+// routes/patients.js
+
+const express = require('express');
+const router = express.Router();
+const Patient = require('../models/Patient');
+
+// Get all patients
+router.route('/').get((req, res) =&gt; {
+    Patient.find()
+        .then(patients =&gt;
+            res.json(patients))
+        .catch(err =&gt;
+            res.status(400)
+                .json('Error: ' + err));
+});
+
+// Add new patient
+router.route('/add')
+    .post((req, res) =&gt; {
+        const { name, age, gender } = req.body;
+
+        const newPatient =
+            new Patient({ name, age, gender });
+
+        newPatient.save()
+            .then(savedPatient =&gt;
+                res.json(savedPatient))
+            .catch(err =&gt; res.status(400)
+                .json('Error: ' + err));
+    });
+
+// Update patient data
+router.route('/update/:id')
+    .post((req, res) =&gt; {
+        console.log('hihhhhiuhiihihiuhiuh');
+
+        Patient.findById(req.params.id)
+            .then(patient =&gt; {
+                if (!patient) {
+                    return res.status(404)
+                        .json('Patient not found');
+                }
+
+                patient.name = req.body.name;
+                patient.age = req.body.age;
+                patient.gender = req.body.gender;
+
+                patient.save()
+                    .then(() =&gt; res.json('Patient updated!'))
+                    .catch(err =&gt; res.status(400)
+                        .json('Error: ' + err));
+            })
+            .catch(err =&gt; res.status(400)
+                .json('Error: ' + err));
+    });
+
+// Delete patient by ID
+router.route('/delete/:id')
+    .delete((req, res) =&gt; {
+        Patient.findByIdAndDelete(req.params.id)
+            .then(patient =&gt; {
+                if (!patient) {
+                    return res.status(404)
+                        .json('Patient not found');
+                }
+                res.json('Patient deleted!');
+            })
+            .catch(err =&gt; res.status(400)
+                .json('Error: ' + err));
+    });
+
+module.exports = router;
+// models/Appointment.js
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const appointmentSchema = new Schema({
+    patientName: { type: String, required: true },
+    doctorName: { type: String, required: true },
+    date: { type: Date, required: true },
+    // Add more fields as needed
+});
+
+const Appointment =
+    mongoose.model('Appointment', appointmentSchema);
+
+module.exports = Appointment;
+// models/Doctor.js
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const doctorSchema = new Schema({
+    name: { type: String, required: true },
+    specialty: { type: String, required: true },
+    // Add more fields as needed
+});
+
+const Doctor =
+    mongoose.model('Doctor', doctorSchema);
+
+module.exports = Doctor;
+// models/Patient.js
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const patientSchema = new Schema({
+    name: { type: String, required: true },
+    age: { type: Number, required: true },
+    gender: { type: String, required: true },
+    // Add more fields as needed
+});
+const Patient = mongoose.model('Patient', patientSchema);
+module.exports = Patient;
