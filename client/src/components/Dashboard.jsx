@@ -4,10 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
 const Dashboard = () => {
-    const [stats, setStats] = useState({ doctors: 0, patients: 0, appointments: 0 });
+    const [stats, setStats] = useState({
+        doctors: 0,
+        patients: 0,
+        appointments: 0,
+        onlineDoctors: 0,
+        onlinePatients: 0
+    });
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
-    const role = localStorage.getItem('role');
 
     useEffect(() => {
         axios.get('http://localhost:5000/stats')
@@ -33,11 +37,21 @@ const Dashboard = () => {
             {/* STATS SECTION */}
             <div className="stats-grid">
                 <div className="stat-card">
-                    <h3>{stats.doctors}</h3>
+                    <h3>
+                        {stats.doctors}
+                        {stats.onlineDoctors > 0 && (
+                            <span className="online-badge"> ({stats.onlineDoctors} Online)</span>
+                        )}
+                    </h3>
                     <p>Verified Specialists</p>
                 </div>
                 <div className="stat-card">
-                    <h3>{stats.patients}</h3>
+                    <h3>
+                        {stats.patients}
+                        {stats.onlinePatients > 0 && (
+                            <span className="online-badge"> ({stats.onlinePatients} Online)</span>
+                        )}
+                    </h3>
                     <p>Happy Patients</p>
                 </div>
                 <div className="stat-card">
@@ -46,33 +60,20 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* ACTIONS SECTION */}
+            {/* GUEST ACTIONS SECTION */}
             <div className="action-section">
-                {!token ? (
-                    <div className="guest-controls" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                        <div className="stat-card" style={{ cursor: 'pointer', border: '2px solid #3b82f6' }} onClick={() => navigate('/login')}>
-                            <h4 style={{ color: '#007bff', fontSize: '1.2rem', marginBottom: '10px' }}>Patient Access</h4>
-                            <p>Book appointments, view your medical history, and manage your health journey.</p>
-                            <button className="primary" style={{ marginTop: '20px', width: '100%' }}>Login / Register</button>
-                        </div>
-                        <div className="stat-card" style={{ cursor: 'pointer', border: '2px solid #14b8a6' }} onClick={() => navigate('/register')}>
-                            <h4 style={{ color: '#0d9488', fontSize: '1.2rem', marginBottom: '10px' }}>Doctor Portal</h4>
-                            <p>Manage your clinical practice, track patient schedules, and update status in real-time.</p>
-                            <button className="muted" style={{ marginTop: '20px', width: '100%', backgroundColor: '#14b8a6', color: 'white', border: 'none' }}>Join as Doctor</button>
-                        </div>
+                <div className="guest-controls" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div className="stat-card" style={{ cursor: 'pointer', border: '2px solid #3b82f6' }} onClick={() => navigate('/login')}>
+                        <h4 style={{ color: '#007bff', fontSize: '1.2rem', marginBottom: '10px' }}>Patient Access</h4>
+                        <p>Book appointments, view your medical history, and manage your health journey.</p>
+                        <button className="primary" style={{ marginTop: '20px', width: '100%' }}>Login / Register</button>
                     </div>
-                ) : (
-                    <div className="user-controls" style={{ textAlign: 'center' }}>
-                        <h2>You are logged in as {role === 'doctor' ? 'a Specialist' : 'a Patient'}</h2>
-                        <button
-                            className="primary"
-                            style={{ padding: '15px 40px', fontSize: '1.1rem', marginTop: '10px' }}
-                            onClick={() => navigate(role === 'doctor' ? '/doctor-dashboard' : '/appointments')}
-                        >
-                            {role === 'doctor' ? 'Access Doctor Schedule' : 'Go to My Health Area'}
-                        </button>
+                    <div className="stat-card" style={{ cursor: 'pointer', border: '2px solid #14b8a6' }} onClick={() => navigate('/register')}>
+                        <h4 style={{ color: '#0d9488', fontSize: '1.2rem', marginBottom: '10px' }}>Doctor Portal</h4>
+                        <p>Manage your clinical practice, track patient schedules, and update status in real-time.</p>
+                        <button className="muted" style={{ marginTop: '20px', width: '100%', backgroundColor: '#14b8a6', color: 'white', border: 'none' }}>Join as Doctor</button>
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );

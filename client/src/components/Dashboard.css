@@ -56,11 +56,18 @@
 }
 
 .stat-card p {
-    color: #666;
+    color: #64748b;
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.85rem;
     letter-spacing: 1px;
+}
+
+.online-badge {
+    font-size: 0.9rem;
+    color: #22c55e;
+    font-weight: 500;
+    margin-left: 5px;
 }
 
 /* Action Section */

@@ -147,7 +147,7 @@ const Appointments = () => {
               </div>
               <div className="field">
                 <label>3. Preferred Date & Time</label>
-                <input type="datetime-local" value={newAppointment.date} onChange={(e) => setNewAppointment({ ...newAppointment, date: e.target.value })} required />
+                <input type="datetime-local" style={{ color: 'black' }} value={newAppointment.date} onChange={(e) => setNewAppointment({ ...newAppointment, date: e.target.value })} required />
               </div>
               <div className="field">
                 <label>4. Symptoms / Notes</label>

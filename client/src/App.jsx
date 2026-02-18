@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import axios from 'axios';
 import Appointments from './components/Appointments';
 import DoctorDashboard from './components/DoctorDashboard';
 import Dashboard from './components/Dashboard';
@@ -15,7 +16,31 @@ const App = () => {
     id: localStorage.getItem('userId')
   });
 
-  const logout = () => {
+  useEffect(() => {
+    const syncOnlineStatus = async () => {
+      if (auth.token) {
+        try {
+          await axios.post('http://localhost:5000/auth/login-status', {}, {
+            headers: { 'x-auth-token': auth.token }
+          });
+        } catch (err) {
+          console.error('Status sync error:', err);
+        }
+      }
+    };
+    syncOnlineStatus();
+  }, [auth.token]);
+
+  const logout = async () => {
+    try {
+      if (auth.token) {
+        await axios.post('http://localhost:5000/auth/logout', {}, {
+          headers: { 'x-auth-token': auth.token }
+        });
+      }
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
     localStorage.clear();
     setAuth({ token: null, role: null, name: null, id: null });
     window.location.href = '/';
@@ -37,20 +62,12 @@ const App = () => {
               <span style={{ fontWeight: '600', color: '#555' }}>Hello, {auth.name} ({auth.role})</span>
               <button className="muted" style={{ padding: '6px 12px' }} onClick={logout}>Logout</button>
             </div>
-          ) : (
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <Link to="/login"><button className="muted" style={{ padding: '8px 16px' }}>Login</button></Link>
-              <Link to="/register"><button className="primary" style={{ padding: '8px 16px', backgroundColor: '#00a7aa', border: 'none', color: 'white', borderRadius: '6px' }}>Register</button></Link>
-            </div>
-          )}
+          ) : null}
         </header>
 
         {auth.token && (
           <nav>
             <ul>
-              <li>
-                <Link to="/">Home Dashboard</Link>
-              </li>
               {auth.role === 'patient' && (
                 <li>
                   <Link to="/appointments">My Health Area</Link>
@@ -67,8 +84,8 @@ const App = () => {
 
         <div style={{ marginTop: '30px' }}>
           <Routes>
-            {/* Public Entry Point */}
-            <Route path="/" element={<Dashboard />} />
+            {/* Public Access: Only if NOT logged in */}
+            <Route path="/" element={!auth.token ? <Dashboard /> : <Navigate to={auth.role === 'doctor' ? '/doctor-dashboard' : '/appointments'} />} />
 
             <Route path="/login" element={!auth.token ? <Login setAuth={setAuth} /> : <Navigate to={auth.role === 'doctor' ? '/doctor-dashboard' : '/appointments'} />} />
             <Route path="/register" element={!auth.token ? <Register setAuth={setAuth} /> : <Navigate to={auth.role === 'doctor' ? '/doctor-dashboard' : '/appointments'} />} />

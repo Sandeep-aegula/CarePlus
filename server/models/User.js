@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
     experience: { type: Number },
     // Fields specific to Patients (optional, can be expanded)
     age: { type: Number },
-    gender: { type: String }
+    gender: { type: String },
+    isOnline: { type: Boolean, default: false }
 }, { timestamps: true });
 
 // Hash password before saving

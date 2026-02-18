@@ -311,20 +311,24 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: flex-end;
+    justify-content: center;
     z-index: 1000;
 }
 
 .booking-modal {
     background: white;
     width: 100%;
+    max-width: 500px;
+    /* Centered on desktop */
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    padding: 30px 20px 40px;
-    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
-    animation: slideUp 0.3s ease-out;
+    padding: 30px 24px 40px;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideUp {
@@ -341,6 +345,7 @@
     margin: 0 0 25px 0;
     font-size: 1.4rem;
     text-align: center;
+    color: #1e293b;
 }
 
 .modal-form {
@@ -364,11 +369,20 @@
 .field select,
 .field input,
 .field textarea {
-    padding: 12px;
+    padding: 14px;
     border: 1px solid #e2e8f0;
-    border-radius: 12px;
+    border-radius: 14px;
     background: #f8fafc;
     font-size: 1rem;
+    color: #1e293b;
+    outline: none;
+}
+
+.field select:focus,
+.field input:focus,
+.field textarea:focus {
+    border-color: #3b82f6;
+    background: white;
 }
 
 .modal-footer {
@@ -379,11 +393,13 @@
 
 .modal-footer button {
     flex: 1;
-    padding: 14px;
-    border-radius: 12px;
+    padding: 16px;
+    border-radius: 14px;
     border: none;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
 }
 
 .modal-footer .muted {
@@ -392,8 +408,13 @@
 }
 
 .modal-footer .primary {
-    background: #3b82f6;
+    background: #00a7aa;
     color: white;
+    box-shadow: 0 4px 12px rgba(0, 167, 170, 0.3);
+}
+
+.modal-footer button:active {
+    transform: scale(0.98);
 }
 
 .cancel-text-btn {

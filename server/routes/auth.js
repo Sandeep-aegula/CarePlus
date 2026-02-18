@@ -20,7 +20,8 @@ router.post('/register', async (req, res) => {
             specialization,
             experience,
             age,
-            gender
+            gender,
+            isOnline: true
         });
 
         await user.save();
@@ -58,6 +59,9 @@ router.post('/login', async (req, res) => {
         const isMatch = await user.comparePassword(password);
         if (!isMatch) return res.status(400).json({ msg: 'Invalid Credentials' });
 
+        user.isOnline = true;
+        await user.save();
+
         const payload = {
             id: user._id,
             role: user.role,
@@ -73,6 +77,40 @@ router.post('/login', async (req, res) => {
                 res.json({ token, user: payload });
             }
         );
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+const { auth } = require('../middleware/auth');
+
+// @route   POST /api/auth/logout
+// @desc    Logout user
+router.post('/logout', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (user) {
+            user.isOnline = false;
+            await user.save();
+        }
+        res.json({ msg: 'Logged out' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+// @route   POST /api/auth/login-status
+// @desc    Sync user online status
+router.post('/login-status', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (user) {
+            user.isOnline = true;
+            await user.save();
+        }
+        res.json({ msg: 'Status updated' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
