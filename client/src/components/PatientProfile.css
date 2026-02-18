@@ -1,0 +1,409 @@
+/* PatientProfile.css */
+.patient-profile-wrapper {
+    background-color: #f8fafc;
+    min-height: 100vh;
+    padding-bottom: 150px;
+    /* Space for floating buttons */
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.profile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.back-btn,
+.edit-profile-btn {
+    background: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-title {
+    font-size: 1.1rem;
+    color: #1e293b;
+    font-weight: 800;
+    margin: 0;
+}
+
+/* Identity Card */
+.identity-card {
+    text-align: center;
+    padding: 10px 20px 30px;
+}
+
+.profile-pill {
+    position: relative;
+    width: 120px;
+    margin: 0 auto 20px;
+}
+
+.avatar-large {
+    width: 120px;
+    height: 120px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #475569;
+    border: 4px solid white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.online-indicator {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    background: #22c55e;
+    border: 4px solid white;
+    border-radius: 50%;
+}
+
+.patient-name-large {
+    font-size: 1.8rem;
+    margin: 0 0 8px 0;
+    color: #0f172a;
+    font-weight: 800;
+}
+
+.patient-id-meta {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.vital-stats {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.vital-pill {
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.vital-pill.blood {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.vital-pill.weight {
+    background: #dbeafe;
+    color: #3b82f6;
+}
+
+/* Tabs */
+.tab-actions {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px;
+    margin-bottom: 30px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.tab-item {
+    padding: 12px 20px;
+    border-radius: 20px;
+    border: none;
+    background: white;
+    white-space: nowrap;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #475569;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    cursor: pointer;
+}
+
+.tab-item.active {
+    background: #fff;
+    color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.tab-item.alert {
+    color: #f97316;
+}
+
+/* Medical History */
+.medical-history {
+    background: white;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    padding: 30px 20px;
+    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.02);
+}
+
+.history-tabs {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.sub-tab {
+    background: none;
+    border: none;
+    padding: 10px 0;
+    font-weight: 700;
+    color: #94a3b8;
+    position: relative;
+    cursor: pointer;
+}
+
+.sub-tab.active {
+    color: #3b82f6;
+}
+
+.sub-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #3b82f6;
+    border-radius: 10px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.history-card {
+    border: 1px solid #f1f5f9;
+    padding: 20px;
+    border-radius: 20px;
+    background: #fff;
+    transition: transform 0.2s;
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.condition-info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.condition-icon {
+    width: 40px;
+    height: 40px;
+    background: #eff6ff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.condition-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #1e293b;
+}
+
+.condition-info p {
+    margin: 2px 0 0 0;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.status-tag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+}
+
+.status-tag.confirmed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-tag.pending {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.status-tag.completed {
+    background: #e0f2fe;
+    color: #075985;
+}
+
+.condition-desc {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Floating Actions */
+.floating-actions {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    width: 90%;
+    max-width: 500px;
+    z-index: 100;
+}
+
+.add-note-btn {
+    flex: 1;
+    background: #f1f5f9;
+    border: none;
+    padding: 16px;
+    border-radius: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.schedule-btn-large {
+    flex: 2;
+    background: #3b82f6;
+    border: none;
+    padding: 16px;
+    border-radius: 16px;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* Booking Modal */
+.booking-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-end;
+    z-index: 1000;
+}
+
+.booking-modal {
+    background: white;
+    width: 100%;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    padding: 30px 20px 40px;
+    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.booking-modal h3 {
+    margin: 0 0 25px 0;
+    font-size: 1.4rem;
+    text-align: center;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.field select,
+.field input,
+.field textarea {
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    font-size: 1rem;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.modal-footer button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.modal-footer .muted {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.modal-footer .primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.cancel-text-btn {
+    background: none;
+    border: none;
+    color: #ef4444;
+    padding: 0;
+    margin-top: 15px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+}

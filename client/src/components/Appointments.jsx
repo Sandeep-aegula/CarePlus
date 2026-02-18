@@ -1,129 +1,169 @@
-//Appointments.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AppointmentCard from './AppointmentCard';
-import './Appointment.css';
+import './PatientProfile.css';
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]);
-  const [newAppointment, setNewAppointment] = useState({ patientName: '', doctorName: '', date: '' });
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [newAppointment, setNewAppointment] = useState({ doctorId: '', date: '', symptoms: '' });
+  const [selectedSpecialty, setSelectedSpecialty] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [showBooking, setShowBooking] = useState(false);
+
+  const userName = localStorage.getItem('userName');
+  const userRole = localStorage.getItem('role');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/appointments')
-      .then(response => setAppointments(response.data))
-      .catch(error => console.error('Error fetching appointments:', error));
-    // fetch doctors for dropdown
-    axios.get('http://localhost:5000/doctors')
-      .then(res => setDoctors(res.data))
-      .catch(err => console.error('Error fetching doctors:', err));
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const config = { headers: { 'x-auth-token': token } };
+
+        const [apptsRes, docsRes] = await Promise.all([
+          axios.get('http://localhost:5000/appointments', config),
+          axios.get('http://localhost:5000/users?role=doctor', config)
+        ]);
+
+        setAppointments(apptsRes.data);
+        setDoctors(docsRes.data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching data', err);
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
-  // helper: format various date inputs for <input type="date">
-  const formatDateForInput = (d) => {
-    if (!d) return '';
-    const dateObj = new Date(d);
-    if (isNaN(dateObj)) return '';
-    const y = dateObj.getFullYear();
-    const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
-  };
+  const specialties = [...new Set(doctors.map(d => d.specialization).filter(s => s))];
+  const filteredDoctors = selectedSpecialty ? doctors.filter(d => d.specialization === selectedSpecialty) : doctors;
 
-  const handleAddAppointment = (e) => {
+  const handleAddAppointment = async (e) => {
     e.preventDefault();
-    axios.post('http://localhost:5000/appointments/add', newAppointment)
-      .then(response => {
-        setAppointments([...appointments, response.data]);
-        setNewAppointment({ patientName: '', doctorName: '', date: '' });
-      })
-      .catch(error => console.error('Error adding appointment:', error));
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:5000/appointments/add', newAppointment, {
+        headers: { 'x-auth-token': token }
+      });
+
+      const apptsRes = await axios.get('http://localhost:5000/appointments', {
+        headers: { 'x-auth-token': token }
+      });
+      setAppointments(apptsRes.data);
+      setNewAppointment({ doctorId: '', date: '', symptoms: '' });
+      setSelectedSpecialty('');
+      setShowBooking(false);
+    } catch (err) {
+      console.error('Error adding appointment', err);
+    }
   };
 
-  const handleUpdateAppointment = (id, e) => {
-    e.preventDefault();
-    axios.post(`http://localhost:5000/appointments/update/${id}`, selectedAppointment)
-      .then(() => {
-        const updateApp = { ...selectedAppointment, _id: id };
-        setAppointments(appointments.map(a => (a._id === id ? updateApp : a)));
-        setSelectedAppointment(null);
-        setIsEditMode(false);
-      })
-      .catch(error => console.error('Error updating appointment:', error));
+  const handleDeleteAppointment = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`http://localhost:5000/appointments/delete/${id}`, {
+        headers: { 'x-auth-token': token }
+      });
+      setAppointments(appointments.filter(a => a._id !== id));
+    } catch (err) {
+      console.error('Error deleting appointment', err);
+    }
   };
 
-  const handleDeleteAppointment = (id) => {
-    axios.delete(`http://localhost:5000/appointments/delete/${id}`)
-      .then(() => setAppointments(appointments.filter(a => a._id !== id)))
-      .catch(error => console.error('Error deleting appointment:', error));
-  };
-
-  const handleEditAppointment = (appointment) => {
-    // ensure date is normalized for the date input
-    setSelectedAppointment({ ...appointment, date: formatDateForInput(appointment.date) });
-    setIsEditMode(true);
-  };
+  if (loading) return <div className="loader-container"><div className="loader"></div></div>;
 
   return (
-    <div className="flex-row" style={{ width: '100%' }}>
-      <div className="flex-column">
-        <div className="add-form">
-          <h4>{isEditMode ? 'Edit Appointment' : 'Add New Appointment'}</h4>
-          <form className="appointment-form" onSubmit={isEditMode ? (e) => handleUpdateAppointment(selectedAppointment._id, e) : handleAddAppointment}>
-            <div className="appointment-grid">
-              <div className="field">
-                <label>Patient Name</label>
-                <input
-                  type="text"
-                  placeholder="Enter patient name"
-                  value={isEditMode ? selectedAppointment?.patientName || '' : newAppointment.patientName}
-                  onChange={(e) => isEditMode ? setSelectedAppointment({ ...selectedAppointment, patientName: e.target.value }) : setNewAppointment({ ...newAppointment, patientName: e.target.value })}
-                  required
-                />
-              </div>
+    <div className="patient-profile-wrapper">
+      <header className="profile-top">
+        <button className="back-btn">‹</button>
+        <h3 className="page-title">Patient Profile</h3>
+        <button className="edit-profile-btn">✎</button>
+      </header>
 
+      <section className="identity-card">
+        <div className="profile-pill">
+          <div className="avatar-large">{userName?.[0]}</div>
+          <div className="online-indicator"></div>
+        </div>
+        <h2 className="patient-name-large">{userName}</h2>
+       
+      </section>
+
+     
+
+      <section className="medical-history">
+        <div className="history-tabs">
+          <button className="sub-tab active">Medical History</button>
+          
+        </div>
+
+        <div className="history-list">
+          {appointments.length === 0 ? (
+            <div className="empty-history">
+              <p>No medical history recorded yet.</p>
+              <button className="primary-inline" onClick={() => setShowBooking(true)}>Book First Appointment</button>
+            </div>
+          ) : (
+            appointments.map(appt => (
+              <div key={appt._id} className="history-card">
+                <div className="card-top">
+                  <div className="condition-info">
+                    <span className="condition-icon">🩺</span>
+                    <div>
+                      <h4>{appt.doctorId?.specialization || 'General Consultation'}</h4>
+                      <p>Visited Dr. {appt.doctorId?.name} • {new Date(appt.date).toLocaleDateString([], { month: 'short', day: '2-digit', year: 'numeric' })}</p>
+                    </div>
+                  </div>
+                  <span className={`status-tag ${appt.status.toLowerCase()}`}>{appt.status}</span>
+                </div>
+                <p className="condition-desc">{appt.symptoms || 'Regular health checkup and monitoring.'}</p>
+                {appt.status === 'Pending' && (
+                  <button className="cancel-text-btn" onClick={() => handleDeleteAppointment(appt._id)}>Cancel Appointment</button>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      </section>
+
+      {showBooking && (
+        <div className="booking-modal-overlay" onClick={() => setShowBooking(false)}>
+          <div className="booking-modal" onClick={e => e.stopPropagation()}>
+            <h3>Schedule Appointment</h3>
+            <form onSubmit={handleAddAppointment} className="modal-form">
               <div className="field">
-                <label>Doctor</label>
-                <select
-                  value={isEditMode ? selectedAppointment?.doctorName || '' : newAppointment.doctorName}
-                  onChange={(e) => isEditMode ? setSelectedAppointment({ ...selectedAppointment, doctorName: e.target.value }) : setNewAppointment({ ...newAppointment, doctorName: e.target.value })}
-                  required
-                >
-                  <option value="">Select doctor</option>
-                  {doctors.map(d => (
-                    <option key={d._id} value={d.name}>{d.name} — {d.specialty}</option>
-                  ))}
+                <label>1. Select specialty</label>
+                <select value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)} required>
+                  <option value="">Select Specialty</option>
+                  {specialties.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
-
               <div className="field">
-                <label>Date</label>
-                <input
-                  type="date"
-                  value={isEditMode ? selectedAppointment?.date ? selectedAppointment.date : '' : newAppointment.date}
-                  onChange={(e) => isEditMode ? setSelectedAppointment({ ...selectedAppointment, date: e.target.value }) : setNewAppointment({ ...newAppointment, date: e.target.value })}
-                  required
-                />
+                <label>2. Select Doctor</label>
+                <select value={newAppointment.doctorId} onChange={(e) => setNewAppointment({ ...newAppointment, doctorId: e.target.value })} required>
+                  <option value="">{selectedSpecialty ? 'Select Doctor' : 'Select specialty first'}</option>
+                  {filteredDoctors.map(d => <option key={d._id} value={d._id}>{d.name}</option>)}
+                </select>
               </div>
-            </div>
-
-            <div className="form-actions">
-              <button type="submit" className="primary">{isEditMode ? 'Update Appointment' : 'Add Appointment'}</button>
-              {isEditMode && <button type="button" className="muted" onClick={() => { setSelectedAppointment(null); setIsEditMode(false); }}>Cancel</button>}
-            </div>
-          </form>
+              <div className="field">
+                <label>3. Preferred Date & Time</label>
+                <input type="datetime-local" value={newAppointment.date} onChange={(e) => setNewAppointment({ ...newAppointment, date: e.target.value })} required />
+              </div>
+              <div className="field">
+                <label>4. Symptoms / Notes</label>
+                <textarea value={newAppointment.symptoms} onChange={(e) => setNewAppointment({ ...newAppointment, symptoms: e.target.value })} rows="3" placeholder="Tell us about your issue..."></textarea>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="muted" onClick={() => setShowBooking(false)}>Cancel</button>
+                <button type="submit" className="primary">Confirm Schedule</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="appointments">
-        <h3>Appointments ({appointments.length})</h3>
-        <div className="appointment-list">
-          {appointments.map(appointment => (
-            <AppointmentCard key={appointment._id} appointment={appointment} onEdit={handleEditAppointment} onDelete={handleDeleteAppointment} />
-          ))}
-        </div>
+      <div className="floating-actions">
+        <button className="schedule-btn-large" onClick={() => setShowBooking(true)}>📅 Schedule</button>
       </div>
     </div>
   );
