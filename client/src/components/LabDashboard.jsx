@@ -20,7 +20,7 @@ const LabDashboard = () => {
         setIsLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/appointments', {
+            const res = await axios.get('/appointments', {
                 headers: { 'x-auth-token': token }
             });
             setAppointments(res.data);
@@ -47,7 +47,7 @@ const LabDashboard = () => {
             const formData = new FormData();
             formData.append('reportFile', file);
 
-            await axios.post(`http://localhost:5000/appointments/${apptId}/upload-report`, formData, {
+            await axios.post(`/appointments/${apptId}/upload-report`, formData, {
                 headers: { 
                     'x-auth-token': token,
                     'Content-Type': 'multipart/form-data'

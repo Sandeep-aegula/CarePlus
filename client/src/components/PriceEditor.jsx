@@ -21,7 +21,7 @@ const PriceEditor = () => {
 
     const fetchCatalog = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/testcenter/catalog', { headers });
+            const res = await axios.get('/api/testcenter/catalog', { headers });
             setServices(res.data.services || []);
         } catch (err) {
             console.error('Failed to fetch catalog:', err);
@@ -42,7 +42,7 @@ const PriceEditor = () => {
 
     const saveEdit = async () => {
         try {
-            await axios.patch('http://localhost:5000/api/testcenter/catalog', {
+            await axios.patch('/api/testcenter/catalog', {
                 serviceName: editData.name,
                 price: Number(editData.price),
                 tat: editData.tat,
@@ -62,7 +62,7 @@ const PriceEditor = () => {
     const addService = async () => {
         if (!newService.name || !newService.price) return;
         try {
-            const res = await axios.patch('http://localhost:5000/api/testcenter/catalog', {
+            const res = await axios.patch('/api/testcenter/catalog', {
                 serviceName: newService.name,
                 price: Number(newService.price),
                 tat: newService.tat,
@@ -80,7 +80,7 @@ const PriceEditor = () => {
 
     const deleteService = async (serviceName) => {
         try {
-            const res = await axios.delete(`http://localhost:5000/api/testcenter/catalog/${encodeURIComponent(serviceName)}`, { headers });
+            const res = await axios.delete(`/api/testcenter/catalog/${encodeURIComponent(serviceName)}`, { headers });
             setServices(res.data.services);
             showMessage('Test removed from catalog');
         } catch (err) {

@@ -57,7 +57,7 @@ const App = () => {
     const syncOnlineStatus = async () => {
       if (auth.token) {
         try {
-          await axios.post('http://localhost:5000/auth/login-status', {}, {
+          await axios.post('/auth/login-status', {}, {
             headers: { 'x-auth-token': auth.token }
           });
         } catch (err) {
@@ -71,7 +71,7 @@ const App = () => {
   const logout = async () => {
     try {
       if (auth.token) {
-        await axios.post('http://localhost:5000/auth/logout', {}, {
+        await axios.post('/auth/logout', {}, {
           headers: { 'x-auth-token': auth.token }
         });
       }

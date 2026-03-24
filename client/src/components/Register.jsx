@@ -28,7 +28,7 @@ const Register = ({ setAuth }) => {
     const onSubmit = async e => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/auth/register', formData);
+            const res = await axios.post('/auth/register', formData);
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('role', res.data.user.role);
             localStorage.setItem('userName', res.data.user.name);

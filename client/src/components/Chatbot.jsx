@@ -29,7 +29,7 @@ const Chatbot = () => {
         setIsTyping(true);
 
         try {
-            const res = await axios.post('http://localhost:5000/chatbot/chat', {
+            const res = await axios.post('/chatbot/chat', {
                 messages: [...messages, userMessage]
             });
             setMessages(prev => [...prev, { role: 'assistant', content: res.data.message }]);

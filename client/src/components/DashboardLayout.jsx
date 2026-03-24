@@ -14,7 +14,7 @@ const DashboardLayout = ({ role }) => {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        await axios.post('http://localhost:5000/auth/logout', {}, {
+        await axios.post('/auth/logout', {}, {
           headers: { 'x-auth-token': token }
         });
       }

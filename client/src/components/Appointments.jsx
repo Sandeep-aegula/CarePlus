@@ -31,8 +31,8 @@ const Appointments = () => {
         const config = { headers: { 'x-auth-token': token } };
 
         const [apptsRes, docsRes] = await Promise.all([
-          axios.get('http://localhost:5000/appointments', config),
-          axios.get('http://localhost:5000/users?role=doctor', config)
+          axios.get('/appointments', config),
+          axios.get('/users?role=doctor', config)
         ]);
 
         setAppointments(apptsRes.data);
@@ -53,11 +53,11 @@ const Appointments = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/appointments/add', newAppointment, {
+      await axios.post('/appointments/add', newAppointment, {
         headers: { 'x-auth-token': token }
       });
 
-      const apptsRes = await axios.get('http://localhost:5000/appointments', {
+      const apptsRes = await axios.get('/appointments', {
         headers: { 'x-auth-token': token }
       });
       setAppointments(apptsRes.data);
@@ -72,7 +72,7 @@ const Appointments = () => {
   const handleDeleteAppointment = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/appointments/delete/${id}`, {
+      await axios.delete(`/appointments/delete/${id}`, {
         headers: { 'x-auth-token': token }
       });
       setAppointments(appointments.filter(a => a._id !== id));
@@ -91,7 +91,7 @@ const Appointments = () => {
   const handleSubmitReview = async () => {
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`http://localhost:5000/appointments/${reviewAppt._id}/review`, { rating, comment }, {
+      await axios.post(`/appointments/${reviewAppt._id}/review`, { rating, comment }, {
         headers: { 'x-auth-token': token }
       });
       setAppointments(appointments.map(a => a._id === reviewAppt._id ? { ...a, isReviewed: true } : a));

@@ -37,7 +37,7 @@ const DoctorsPage = () => {
 
     const fetchDoctors = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/doctor/list');
+            const res = await axios.get('/api/doctor/list');
             const sorted = res.data.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
             setDoctors(sorted);
         } catch (err) {
@@ -101,7 +101,7 @@ const DoctorsPage = () => {
 
         setLoadingSlots(true);
         try {
-            const res = await axios.get(`http://localhost:5000/appointments/booked-slots/${bookingDoctor._id}/${dateStr}`);
+            const res = await axios.get(`/appointments/booked-slots/${bookingDoctor._id}/${dateStr}`);
             setBookedSlots(res.data);
         } catch (err) {
             console.error('Error fetching booked slots:', err);
@@ -115,7 +115,7 @@ const DoctorsPage = () => {
         setBookingError('');
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:5000/appointments/add', {
+            await axios.post('/appointments/add', {
                 doctorId: bookingDoctor._id,
                 date: bookingDate,
                 timeSlot: bookingTime,

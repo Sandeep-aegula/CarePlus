@@ -12,7 +12,7 @@ const ReviewsPage = () => {
         const fetchReviews = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/api/doctor/profile', {
+                const res = await axios.get('/api/doctor/profile', {
                     headers: { 'x-auth-token': token }
                 });
                 if (res.data && res.data.reviews) {

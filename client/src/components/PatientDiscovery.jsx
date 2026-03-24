@@ -86,7 +86,7 @@ const PatientDiscovery = () => {
         const fetchAppointments = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/appointments', {
+                const res = await axios.get('/appointments', {
                     headers: { 'x-auth-token': token }
                 });
                 setAppointments(res.data);
@@ -101,7 +101,7 @@ const PatientDiscovery = () => {
     const cancelAppointment = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/appointments/update/${id}`, { status: 'Cancelled' }, {
+            await axios.post(`/appointments/update/${id}`, { status: 'Cancelled' }, {
                 headers: { 'x-auth-token': token }
             });
             setAppointments(prev => prev.map(a => a._id === id ? { ...a, status: 'Cancelled' } : a));
@@ -120,7 +120,7 @@ const PatientDiscovery = () => {
     const handleSubmitReview = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/appointments/${reviewAppt._id}/review`, { rating, comment }, {
+            await axios.post(`/appointments/${reviewAppt._id}/review`, { rating, comment }, {
                 headers: { 'x-auth-token': token }
             });
             setAppointments(prev => prev.map(a => a._id === reviewAppt._id ? { ...a, isReviewed: true } : a));
@@ -197,7 +197,7 @@ const PatientDiscovery = () => {
             setIsLoadingProviders(true);
             try {
                 const [lat, lng] = userLocation;
-                const res = await axios.get(`http://localhost:5000/api/search`, {
+                const res = await axios.get(`/api/search`, {
                     params: { lat, lng, maxDistance: 10000 },
                     headers: { 'x-auth-token': localStorage.getItem('token') }
                 });
@@ -250,7 +250,7 @@ const PatientDiscovery = () => {
 
         const fetchTopDoctors = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/doctor/list');
+                const res = await axios.get('/api/doctor/list');
                 const sorted = res.data.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
                 setTopDoctors(sorted.slice(0, 4));
             } catch (err) {

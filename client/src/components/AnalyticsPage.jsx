@@ -11,7 +11,7 @@ const AnalyticsPage = () => {
         const fetchAnalytics = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/api/stats/provider', {
+                const res = await axios.get('/api/stats/provider', {
                     headers: { 'x-auth-token': token }
                 });
                 // If no data, provide fallback for new users

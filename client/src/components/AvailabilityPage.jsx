@@ -25,7 +25,7 @@ const AvailabilityPage = () => {
     const fetchProfile = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/doctor/profile', {
+            const res = await axios.get('/api/doctor/profile', {
                 headers: { 'x-auth-token': token }
             });
             setAvailability(res.data.availability || []);
@@ -44,7 +44,7 @@ const AvailabilityPage = () => {
     const createProfile = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put('http://localhost:5000/api/doctor/profile', {
+            await axios.put('/api/doctor/profile', {
                 specialty,
                 consultationFee: Number(consultationFee),
                 clinicName,
@@ -75,7 +75,7 @@ const AvailabilityPage = () => {
         setSaving(true);
         try {
             const token = localStorage.getItem('token');
-            await axios.put('http://localhost:5000/api/doctor/availability', { availability }, {
+            await axios.put('/api/doctor/availability', { availability }, {
                 headers: { 'x-auth-token': token }
             });
             setSaved(true);

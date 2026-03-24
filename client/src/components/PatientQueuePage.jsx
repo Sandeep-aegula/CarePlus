@@ -12,7 +12,7 @@ const PatientQueuePage = () => {
         const fetchAppointments = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/appointments', {
+                const res = await axios.get('/appointments', {
                     headers: { 'x-auth-token': token }
                 });
                 setAppointments(res.data);
@@ -28,7 +28,7 @@ const PatientQueuePage = () => {
     const updateStatus = async (id, status) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/appointments/update/${id}`, { status }, {
+            await axios.post(`/appointments/update/${id}`, { status }, {
                 headers: { 'x-auth-token': token }
             });
             setAppointments(appointments.map(appt =>

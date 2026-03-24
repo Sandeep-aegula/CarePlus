@@ -27,7 +27,7 @@ const ReportsPage = () => {
         const fetchReports = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/appointments', {
+                const res = await axios.get('/appointments', {
                     headers: { 'x-auth-token': token }
                 });
                 
@@ -75,7 +75,7 @@ const ReportsPage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/appointments/update/${apptId}`, {
+            await axios.post(`/appointments/update/${apptId}`, {
                 status: 'Completed', // Advancing status directly to completed when uploaded from here
                 report: url
             }, {
@@ -83,7 +83,7 @@ const ReportsPage = () => {
             });
             
             // Re-fetch
-            const res = await axios.get('http://localhost:5000/appointments', { headers: { 'x-auth-token': token } });
+            const res = await axios.get('/appointments', { headers: { 'x-auth-token': token } });
             const validAppts = res.data.filter(a => a.status === 'Processing' || a.status === 'Completed' || a.report);
             const mapped = validAppts.map(appt => ({
                  _id: appt._id,
@@ -115,7 +115,7 @@ const ReportsPage = () => {
             const formData = new FormData();
             formData.append('reportFile', file);
 
-            await axios.post(`http://localhost:5000/appointments/${apptId}/upload-report`, formData, {
+            await axios.post(`/appointments/${apptId}/upload-report`, formData, {
                 headers: { 
                     'x-auth-token': token,
                     'Content-Type': 'multipart/form-data'
@@ -123,7 +123,7 @@ const ReportsPage = () => {
             });
             
             // Re-fetch
-            const res = await axios.get('http://localhost:5000/appointments', { headers: { 'x-auth-token': token } });
+            const res = await axios.get('/appointments', { headers: { 'x-auth-token': token } });
             const validAppts = res.data.filter(a => a.status === 'Processing' || a.status === 'Completed' || a.report);
             const mapped = validAppts.map(appt => ({
                  _id: appt._id,

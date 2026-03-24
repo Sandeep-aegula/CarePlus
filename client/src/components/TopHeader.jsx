@@ -16,7 +16,7 @@ const TopHeader = ({ role, onMenuClick, onLogout }) => {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/auth/me', {
+      const res = await axios.get('/auth/me', {
         headers: { 'x-auth-token': token }
       });
       setProfileData(res.data);
@@ -28,7 +28,7 @@ const TopHeader = ({ role, onMenuClick, onLogout }) => {
   const fetchNotifications = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/notifications', {
+      const res = await axios.get('/api/notifications', {
         headers: { 'x-auth-token': token }
       });
       setNotifications(res.data);
@@ -49,7 +49,7 @@ const TopHeader = ({ role, onMenuClick, onLogout }) => {
   const handleMarkAsRead = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/notifications/${id}/read`, {}, {
+      await axios.put(`/api/notifications/${id}/read`, {}, {
         headers: { 'x-auth-token': token }
       });
       fetchNotifications();
@@ -61,7 +61,7 @@ const TopHeader = ({ role, onMenuClick, onLogout }) => {
   const handleReadAll = async () => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put('http://localhost:5000/api/notifications/read-all', {}, {
+      await axios.put('/api/notifications/read-all', {}, {
         headers: { 'x-auth-token': token }
       });
       fetchNotifications();

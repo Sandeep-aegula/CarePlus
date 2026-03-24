@@ -35,7 +35,7 @@ const SamplesPage = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/appointments', {
+            const res = await axios.get('/appointments', {
                 headers: { 'x-auth-token': token }
             });
             const mapped = res.data.map(appt => {
@@ -90,14 +90,14 @@ const SamplesPage = () => {
             if (optionalFile) {
                 const formData = new FormData();
                 formData.append('reportFile', optionalFile);
-                await axios.post(`http://localhost:5000/appointments/${sample._id}/upload-report`, formData, {
+                await axios.post(`/appointments/${sample._id}/upload-report`, formData, {
                     headers: { 
                         'x-auth-token': token,
                         'Content-Type': 'multipart/form-data'
                     }
                 });
             } else {
-                await axios.post(`http://localhost:5000/appointments/update/${sample._id}`, {
+                await axios.post(`/appointments/update/${sample._id}`, {
                     status: backendStatus
                 }, {
                     headers: { 'x-auth-token': token }

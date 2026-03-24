@@ -50,7 +50,7 @@ const LabTestsPage = () => {
         try {
             const [lat, lng] = userLocation || [17.3850, 78.4867];
             const queryName = testName.split('(')[0].trim(); // e.g. "Complete Blood Count"
-            const res = await axios.get(`http://localhost:5000/api/search/price-compare?lat=${lat}&lng=${lng}&testName=${encodeURIComponent(queryName)}`);
+            const res = await axios.get(`/api/search/price-compare?lat=${lat}&lng=${lng}&testName=${encodeURIComponent(queryName)}`);
             
             if (res.data && res.data.labs) {
                 setAvailableLabs(res.data.labs);
@@ -118,7 +118,7 @@ const LabTestsPage = () => {
                 ...additionalTests.map(t => ({ name: t.name, price: t.cheapestPrice }))
             ];
 
-            await axios.post('http://localhost:5000/appointments/add', {
+            await axios.post('/appointments/add', {
                 doctorId: selectedLabId, // Lab mapped to doctorId
                 date: bookingDate,
                 symptoms: `Lab Test Booking`,

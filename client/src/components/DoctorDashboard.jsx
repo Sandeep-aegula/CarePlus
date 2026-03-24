@@ -19,13 +19,13 @@ const DoctorDashboard = () => {
         const fetchAppointments = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/appointments', {
+                const res = await axios.get('/appointments', {
                     headers: { 'x-auth-token': token }
                 });
                 setAppointments(res.data);
                 
                 try {
-                    const profileRes = await axios.get('http://localhost:5000/api/doctor/profile', {
+                    const profileRes = await axios.get('/api/doctor/profile', {
                         headers: { 'x-auth-token': token }
                     });
                     if (profileRes.data) {
@@ -51,7 +51,7 @@ const DoctorDashboard = () => {
     const updateStatus = async (id, status, extraData = {}) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/appointments/update/${id}`, { status, ...extraData }, {
+            await axios.post(`/appointments/update/${id}`, { status, ...extraData }, {
                 headers: { 'x-auth-token': token }
             });
             setAppointments(appointments.map(appt =>
