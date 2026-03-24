@@ -10,15 +10,15 @@ const fs = require('fs');
 
 const uploadsDir = path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+  fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, uploadsDir),
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, `report-${uniqueSuffix}-${file.originalname}`);
-    }
+  destination: (req, file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, `report-${uniqueSuffix}-${file.originalname}`);
+  }
 });
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
@@ -107,11 +107,11 @@ router.post('/add', auth, async (req, res) => {
     });
 
     const saved = await newAppointment.save();
-    
+
     // Notify the provider (Doctor or Lab)
     await createNotification(
-      doctorId, 
-      'New Appointment Request', 
+      doctorId,
+      'New Appointment Request',
       `You have a new appointment for ${symptoms || 'General Checkup'} on ${new Date(date).toLocaleDateString()}.`,
       'appointment'
     );
@@ -157,21 +157,21 @@ router.post('/:id/upload-report', auth, upload.single('reportFile'), async (req,
     if (!req.file) return res.status(400).json({ msg: 'No file uploaded' });
     const appointment = await Appointment.findById(req.params.id);
     if (!appointment) return res.status(404).json({ msg: 'Appointment not found' });
-    
+
     const reportUrl = `http://localhost:5000/uploads/${req.file.filename}`;
-    
+
     appointment.report = reportUrl;
     appointment.status = 'Completed';
     await appointment.save();
 
     // Notify the patient
     await createNotification(
-      appointment.patientId, 
-      'Test Report Ready', 
+      appointment.patientId,
+      'Test Report Ready',
       `Your report for appointment on ${appointment.date} is now available.`,
       'report'
     );
-    
+
     res.json({ msg: 'Report uploaded', reportUrl });
   } catch (err) {
     console.error(err);
@@ -222,18 +222,18 @@ router.post('/:id/review', auth, async (req, res) => {
     // Add review to provider profile (doctor or lab)
     const Provider = require('../models/Provider');
     const doctorProfile = await Provider.findOne({ userId: appointment.doctorId });
-    
+
     if (doctorProfile) {
       const User = require('../models/User');
       const patient = await User.findById(req.user.id);
 
       doctorProfile.reviews.push({
-         rating: Number(rating),
-         comment: comment || '',
-         date: new Date(),
-         patientName: patient ? patient.name : 'Unknown Patient'
+        rating: Number(rating),
+        comment: comment || '',
+        date: new Date(),
+        patientName: patient ? patient.name : 'Unknown Patient'
       });
-      
+
       doctorProfile.totalReviews = doctorProfile.reviews.length;
       const sum = doctorProfile.reviews.reduce((acc, r) => acc + (Number(r.rating) || 0), 0);
       doctorProfile.averageRating = doctorProfile.totalReviews > 0 ? (sum / doctorProfile.totalReviews) : 0;

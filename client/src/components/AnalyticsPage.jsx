@@ -1,35 +1,62 @@
-import React from 'react';
-import { TrendingUp, Users, DollarSign, Calendar } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { TrendingUp, Users, DollarSign, Calendar, BarChart3 } from 'lucide-react';
 import './DoctorDashboard.css';
 
-// Premium Sample Data for Analytics Presentation
-const MONTHLY_DATA = [
-    { month: 'Oct', year: 2025, patients: 124, revenue: 62000 },
-    { month: 'Nov', year: 2025, patients: 142, revenue: 71000 },
-    { month: 'Dec', year: 2025, patients: 138, revenue: 69000 },
-    { month: 'Jan', year: 2026, patients: 156, revenue: 78000 },
-    { month: 'Feb', year: 2026, patients: 182, revenue: 91000 },
-    { month: 'Mar', year: 2026, patients: 214, revenue: 107000 },
-];
-
 const AnalyticsPage = () => {
-    const totalPatients = MONTHLY_DATA.reduce((a, d) => a + d.patients, 0);
-    const totalRevenue = MONTHLY_DATA.reduce((a, d) => a + d.revenue, 0);
-    const avgPatients = Math.round(totalPatients / MONTHLY_DATA.length);
-    
-    // Performance Metrics
-    const latest = MONTHLY_DATA[MONTHLY_DATA.length - 1];
-    const previous = MONTHLY_DATA[MONTHLY_DATA.length - 2];
-    const patientGrowth = latest && previous ? ((latest.patients - previous.patients) / previous.patients * 100).toFixed(1) : "0.0";
+    const [monthlyData, setMonthlyData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const maxPatients = Math.max(...MONTHLY_DATA.map(d => d.patients));
-    const maxRevenue = Math.max(...MONTHLY_DATA.map(d => d.revenue));
+    useEffect(() => {
+        const fetchAnalytics = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const res = await axios.get('http://localhost:5000/api/stats/provider', {
+                    headers: { 'x-auth-token': token }
+                });
+                // If no data, provide fallback for new users
+                if (res.data.length === 0) {
+                    setMonthlyData([
+                        { month: 'Jan', patients: 0, revenue: 0 },
+                        { month: 'Feb', patients: 0, revenue: 0 },
+                        { month: 'Mar', patients: 0, revenue: 0 }
+                    ]);
+                } else {
+                    setMonthlyData(res.data);
+                }
+            } catch (err) {
+                console.error('Analytics fetch error:', err);
+            }
+            setLoading(false);
+        };
+        fetchAnalytics();
+    }, []);
+
+    const totalPatients = monthlyData.reduce((a, d) => a + d.patients, 0);
+    const totalRevenue = monthlyData.reduce((a, d) => a + d.revenue, 0);
+    const avgPatients = monthlyData.length > 0 ? Math.round(totalPatients / monthlyData.length) : 0;
+
+    // Calculate growth relative to previous month
+    const latest = monthlyData[monthlyData.length - 1];
+    const previous = monthlyData[monthlyData.length - 2];
+    const patientGrowth = (latest && previous && previous.patients > 0)
+        ? ((latest.patients - previous.patients) / previous.patients * 100).toFixed(1)
+        : "0.0";
+
+    const maxPatients = Math.max(...monthlyData.map(d => d.patients), 1);
+    const maxRevenue = Math.max(...monthlyData.map(d => d.revenue), 1);
+
+    if (loading) return (
+        <div style={{ padding: '40px', textAlign: 'center' }}>
+            <h2>Loading Practice Analytics...</h2>
+        </div>
+    );
 
     return (
         <div className="doc-dashboard">
             <div className="doc-greeting">
                 <h1>Analytics & Performance</h1>
-                <p>Detailed visualization of your practice metrics and growth trends</p>
+                <p>Track your practice growth and financial metrics in real-time</p>
             </div>
 
             {/* Stats Row */}
@@ -39,27 +66,27 @@ const AnalyticsPage = () => {
                         <Users size={22} color="white" />
                     </div>
                     <div className="stat-body">
-                        <span className="stat-label">Total Patient Visits</span>
+                        <span className="stat-label">Total Visits</span>
                         <span className="stat-value">{totalPatients}</span>
                     </div>
-                    <span className="stat-badge stat-badge-blue">6 Months</span>
+                    <span className="stat-badge stat-badge-blue">Total</span>
                 </div>
                 <div className="doc-stat-card">
                     <div className="stat-icon-wrap stat-green">
                         <DollarSign size={22} color="white" />
                     </div>
                     <div className="stat-body">
-                        <span className="stat-label">Projected Revenue</span>
+                        <span className="stat-label">Total Revenue</span>
                         <span className="stat-value">₹{(totalRevenue / 1000).toFixed(1)}k</span>
                     </div>
-                    <span className="stat-badge stat-badge-green">+22%</span>
+                    <span className="stat-badge stat-badge-green">6 Months</span>
                 </div>
                 <div className="doc-stat-card">
                     <div className="stat-icon-wrap stat-navy">
                         <Calendar size={22} color="white" />
                     </div>
                     <div className="stat-body">
-                        <span className="stat-label">Monthly Average</span>
+                        <span className="stat-label">Avg Volume/Mo</span>
                         <span className="stat-value">{avgPatients}</span>
                     </div>
                 </div>
@@ -68,31 +95,33 @@ const AnalyticsPage = () => {
                         <TrendingUp size={22} color="white" />
                     </div>
                     <div className="stat-body">
-                        <span className="stat-label">Current Growth</span>
-                        <span className="stat-value" style={{ color: '#22c55e' }}>+{patientGrowth}%</span>
+                        <span className="stat-label">Patient Growth</span>
+                        <span className="stat-value" style={{ color: parseFloat(patientGrowth) >= 0 ? '#22c55e' : '#ef4444' }}>
+                            {parseFloat(patientGrowth) >= 0 ? '+' : ''}{patientGrowth}%
+                        </span>
                     </div>
                 </div>
             </div>
 
             {/* Charts Grid */}
             <div className="doc-content-grid">
-                {/* Patient Volume Chart */}
+                {/* Patients Chart */}
                 <div className="doc-queue-section">
                     <div className="section-top">
                         <div>
-                            <h2>Patient Volume Trends</h2>
-                            <p>Monthly distribution of patient visits (Last 6 Months)</p>
+                            <h2>Real-time Patient Volume</h2>
+                            <p>Monthly visits tracked by appointment status</p>
                         </div>
                     </div>
                     <div className="analytics-chart">
-                        {MONTHLY_DATA.map((d, i) => (
+                        {monthlyData.map((d, i) => (
                             <div key={i} className="chart-bar-group">
                                 <div className="chart-bar-wrapper">
                                     <div
                                         className="chart-bar bar-blue"
-                                        style={{ height: `${(d.patients / maxPatients) * 100}%` }}
+                                        style={{ height: `${(d.patients / maxPatients) * 100 || 5}%` }}
                                     >
-                                        <span className="bar-tooltip">{d.patients} patients</span>
+                                        <span className="bar-tooltip">{d.patients} pts</span>
                                     </div>
                                 </div>
                                 <span className="chart-label">{d.month}</span>
@@ -101,21 +130,21 @@ const AnalyticsPage = () => {
                     </div>
                 </div>
 
-                {/* Revenue Evolution Chart */}
+                {/* Revenue Chart */}
                 <div className="doc-queue-section">
                     <div className="section-top">
                         <div>
-                            <h2>Revenue Evolution</h2>
-                            <p>Net revenue earned from consultations and tests</p>
+                            <h2>Revenue Insights</h2>
+                            <p>Total revenue generated from tests & consultations</p>
                         </div>
                     </div>
                     <div className="analytics-chart">
-                        {MONTHLY_DATA.map((d, i) => (
+                        {monthlyData.map((d, i) => (
                             <div key={i} className="chart-bar-group">
                                 <div className="chart-bar-wrapper">
                                     <div
                                         className="chart-bar bar-green"
-                                        style={{ height: `${(d.revenue / maxRevenue) * 100}%` }}
+                                        style={{ height: `${(d.revenue / maxRevenue) * 100 || 5}%` }}
                                     >
                                         <span className="bar-tooltip">₹{(d.revenue / 1000).toFixed(1)}k</span>
                                     </div>
@@ -127,35 +156,35 @@ const AnalyticsPage = () => {
                 </div>
             </div>
 
-            {/* Monthly Detailed Breakdown */}
+            {/* Monthly Breakdown Table */}
             <div className="doc-queue-section" style={{ marginTop: '24px' }}>
                 <div className="section-top">
                     <div>
-                        <h2>Performance Breakdown</h2>
-                        <p>Aggregated monthly data for auditing and reporting</p>
+                        <h2>Detailed Performance Metrics</h2>
+                        <p>Aggregated monthly breakdown of visits and revenue</p>
                     </div>
                 </div>
                 <table className="analytics-table">
                     <thead>
                         <tr>
                             <th>Month</th>
-                            <th>Total Patients</th>
-                            <th>Revenue Generated</th>
-                            <th>Avg Revenue / Patient</th>
-                            <th>Change Status</th>
+                            <th>Visits</th>
+                            <th>Revenue</th>
+                            <th>Avg / Visit</th>
+                            <th>Growth</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {MONTHLY_DATA.map((d, i) => {
-                            const prev = i > 0 ? MONTHLY_DATA[i - 1].revenue : d.revenue;
-                            const growth = ((d.revenue - prev) / prev * 100).toFixed(1);
-                            const avgPerPatient = (d.revenue / d.patients);
+                        {monthlyData.map((d, i) => {
+                            const prev = i > 0 ? monthlyData[i - 1].revenue : d.revenue;
+                            const growth = prev > 0 ? ((d.revenue - prev) / prev * 100).toFixed(1) : "0.0";
+                            const avgPerPatient = d.patients > 0 ? (d.revenue / d.patients).toFixed(0) : "0";
                             return (
                                 <tr key={i}>
-                                    <td><strong>{d.month} {d.year}</strong></td>
-                                    <td>{d.patients} Visited</td>
+                                    <td><strong>{d.month} {d.year || 2026}</strong></td>
+                                    <td>{d.patients}</td>
                                     <td>₹{d.revenue.toLocaleString()}</td>
-                                    <td>₹{avgPerPatient.toFixed(0)}</td>
+                                    <td>₹{avgPerPatient}</td>
                                     <td>
                                         <span className={`growth-badge ${parseFloat(growth) >= 0 ? 'positive' : 'negative'}`}>
                                             {parseFloat(growth) >= 0 ? '+' : ''}{growth}%
@@ -164,6 +193,9 @@ const AnalyticsPage = () => {
                                 </tr>
                             );
                         })}
+                        {monthlyData.length === 0 && (
+                            <tr><td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>No analytical data found yet</td></tr>
+                        )}
                     </tbody>
                 </table>
             </div>
