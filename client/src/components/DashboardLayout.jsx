@@ -43,7 +43,7 @@ const DashboardLayout = ({ role }) => {
       {/* Main Content Area */}
       <div className="main-area">
         {/* Top Header */}
-        <TopHeader role={role} onMenuClick={toggleSidebar} />
+        <TopHeader role={role} onMenuClick={toggleSidebar} onLogout={handleLogout} />
 
         {/* Dynamic Page Content */}
         <main className="content-container">

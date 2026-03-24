@@ -17,6 +17,7 @@ const doctorRouter = require('./routes/doctorRoutes');
 const testcenterRouter = require('./routes/testcenterRoutes');
 const visitRouter = require('./routes/visitRoutes');
 const healthVaultRouter = require('./routes/healthVaultRoutes');
+const notificationsRouter = require('./routes/notifications');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -49,6 +50,7 @@ app.use('/api/doctor', doctorRouter);
 app.use('/api/testcenter', testcenterRouter);
 app.use('/api/visits', visitRouter);
 app.use('/api/health-vault', healthVaultRouter);
+app.use('/api/notifications', notificationsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  Home, FileText, X, LogOut, LayoutDashboard, Users,
+  Home, FileText, X, LayoutDashboard, Users,
   DollarSign, Star, BarChart3, Stethoscope, FlaskConical, Building2,
   TestTubes, ClipboardList, CalendarClock
 } from 'lucide-react';
@@ -68,24 +68,7 @@ const Sidebar = ({ role, isOpen, onClose, onLogout }) => {
         </ul>
       </nav>
 
-      {/* Sidebar Footer */}
-      <div className="sidebar-footer">
-        <div className="sidebar-profile">
-          <div className="sidebar-profile-avatar">
-            <div className="profile-online-dot"></div>
-          </div>
-          <div className="sidebar-profile-info">
-            <span className="profile-name">{isDoctor ? `Dr. ${userName}` : userName}</span>
-            <span className="profile-role">
-              {isDoctor ? 'Senior Doctor' : isLab ? 'Lab Admin' : 'Premium Member'}
-            </span>
-          </div>
-        </div>
-        <button className="logout-btn" onClick={onLogout}>
-          <LogOut size={20} />
-          <span>Logout</span>
-        </button>
-      </div>
+      {/* Sidebar Footer Removed since it's now in the header profile popup */}
     </aside>
   );
 };

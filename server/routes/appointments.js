@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Appointment = require('../models/Appointment');
 const { auth } = require('../middleware/auth');
+const { createNotification } = require('../utils/notify');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -106,6 +107,15 @@ router.post('/add', auth, async (req, res) => {
     });
 
     const saved = await newAppointment.save();
+    
+    // Notify the provider (Doctor or Lab)
+    await createNotification(
+      doctorId, 
+      'New Appointment Request', 
+      `You have a new appointment for ${symptoms || 'General Checkup'} on ${new Date(date).toLocaleDateString()}.`,
+      'appointment'
+    );
+
     res.json(saved);
   } catch (err) {
     console.error('Error adding appointment:', err.message);
@@ -153,6 +163,14 @@ router.post('/:id/upload-report', auth, upload.single('reportFile'), async (req,
     appointment.report = reportUrl;
     appointment.status = 'Completed';
     await appointment.save();
+
+    // Notify the patient
+    await createNotification(
+      appointment.patientId, 
+      'Test Report Ready', 
+      `Your report for appointment on ${appointment.date} is now available.`,
+      'report'
+    );
     
     res.json({ msg: 'Report uploaded', reportUrl });
   } catch (err) {

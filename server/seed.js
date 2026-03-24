@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/hospital';
 
-// --- Schemas (inline to avoid import issues) ---
+// --- Schemas ---
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -57,6 +57,18 @@ providerSchema.index({ location: '2dsphere' });
 
 const User = mongoose.model('User', userSchema);
 const Provider = mongoose.model('Provider', providerSchema);
+const Appointment = mongoose.model('Appointment', new mongoose.Schema({
+    patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    date: { type: Date, required: true },
+    timeSlot: { type: String },
+    symptoms: { type: String },
+    status: { type: String, default: 'Pending', enum: ['Pending', 'Confirmed', 'Cancelled', 'Completed', 'Collected', 'Processing', 'Awaiting'] },
+    prescription: { type: String, default: '' },
+    report: { type: String, default: '' },
+    tests: [{ name: String, price: Number }],
+    isReviewed: { type: Boolean, default: false }
+}, { timestamps: true }));
 
 // --- Seed Data ---
 const PASSWORD = '123456789';
@@ -276,107 +288,6 @@ const testCenters = [
                 { rating: 4, comment: 'Good quality reports.' },
             ]
         }
-    },
-    {
-        name: 'HealthScan Diagnostics',
-        email: 'healthscan@careplus.com',
-        provider: {
-            clinicName: 'HealthScan Imaging & Labs',
-            address: 'Secunderabad, Hyderabad',
-            specialty: 'Imaging & Lab',
-            isAvailable: true,
-            isLive: true,
-            location: { type: 'Point', coordinates: [78.4983, 17.4344] },
-            availability: [
-                { day: 'Monday', startTime: '06:00', endTime: '21:00' },
-                { day: 'Tuesday', startTime: '06:00', endTime: '21:00' },
-                { day: 'Wednesday', startTime: '06:00', endTime: '21:00' },
-                { day: 'Thursday', startTime: '06:00', endTime: '21:00' },
-                { day: 'Friday', startTime: '06:00', endTime: '21:00' },
-                { day: 'Saturday', startTime: '06:00', endTime: '16:00' },
-                { day: 'Sunday', startTime: '08:00', endTime: '13:00' },
-            ],
-            services: [
-                { name: 'MRI Whole Brain', price: 7500, tat: '24 hrs', homeCollection: false },
-                { name: 'CT Scan Chest', price: 5000, tat: '12 hrs', homeCollection: false },
-                { name: 'X-Ray', price: 500, tat: '2 hrs', homeCollection: false },
-                { name: 'Ultrasound Abdomen', price: 1500, tat: '4 hrs', homeCollection: false },
-                { name: 'ECG', price: 300, tat: '1 hr', homeCollection: false },
-            ],
-            averageRating: 4.8,
-            totalReviews: 312,
-            reviews: [
-                { rating: 5, comment: 'State of the art equipment.' },
-                { rating: 5, comment: 'Very accurate imaging results.' },
-                { rating: 4, comment: 'Open on Sundays which is very helpful.' },
-            ]
-        }
-    },
-    {
-        name: 'QuickTest Labs',
-        email: 'quicktest@careplus.com',
-        provider: {
-            clinicName: 'QuickTest Express Lab',
-            address: 'Miyapur, Hyderabad',
-            specialty: 'Express Lab',
-            isAvailable: true,
-            isLive: true,
-            location: { type: 'Point', coordinates: [78.3568, 17.4969] },
-            availability: [
-                { day: 'Monday', startTime: '05:30', endTime: '22:00' },
-                { day: 'Tuesday', startTime: '05:30', endTime: '22:00' },
-                { day: 'Wednesday', startTime: '05:30', endTime: '22:00' },
-                { day: 'Thursday', startTime: '05:30', endTime: '22:00' },
-                { day: 'Friday', startTime: '05:30', endTime: '22:00' },
-                { day: 'Saturday', startTime: '06:00', endTime: '18:00' },
-                { day: 'Sunday', startTime: '06:00', endTime: '12:00' },
-            ],
-            services: [
-                { name: 'Rapid COVID Antigen', price: 300, tat: '30 min', homeCollection: true },
-                { name: 'Dengue NS1', price: 600, tat: '2 hrs', homeCollection: true },
-                { name: 'Malaria Test', price: 350, tat: '1 hr', homeCollection: true },
-                { name: 'Typhoid Test', price: 400, tat: '2 hrs', homeCollection: true },
-                { name: 'Complete Blood Picture', price: 500, tat: '3 hrs', homeCollection: true },
-            ],
-            averageRating: 4.4,
-            totalReviews: 156,
-            reviews: [
-                { rating: 5, comment: 'Super fast results!' },
-                { rating: 4, comment: 'Home collection is very prompt.' },
-            ]
-        }
-    },
-    {
-        name: 'GenomeX Lab',
-        email: 'genomex@careplus.com',
-        provider: {
-            clinicName: 'GenomeX Advanced Diagnostics',
-            address: 'HITEC City, Hyderabad',
-            specialty: 'Genetic & Advanced Testing',
-            isAvailable: true,
-            isLive: false,
-            location: { type: 'Point', coordinates: [78.3773, 17.4474] },
-            availability: [
-                { day: 'Monday', startTime: '08:00', endTime: '17:00' },
-                { day: 'Tuesday', startTime: '08:00', endTime: '17:00' },
-                { day: 'Wednesday', startTime: '08:00', endTime: '17:00' },
-                { day: 'Thursday', startTime: '08:00', endTime: '17:00' },
-                { day: 'Friday', startTime: '08:00', endTime: '17:00' },
-            ],
-            services: [
-                { name: 'Whole Exome Sequencing', price: 25000, tat: '7 days', homeCollection: false },
-                { name: 'Cancer Marker Panel', price: 3500, tat: '48 hrs', homeCollection: false },
-                { name: 'Allergy Panel (50)', price: 4000, tat: '3 days', homeCollection: true },
-                { name: 'Hormone Panel', price: 2000, tat: '24 hrs', homeCollection: true },
-                { name: 'Autoimmune Panel', price: 3000, tat: '48 hrs', homeCollection: false },
-            ],
-            averageRating: 4.9,
-            totalReviews: 87,
-            reviews: [
-                { rating: 5, comment: 'Cutting-edge testing, very accurate.' },
-                { rating: 5, comment: 'The genetic counseling was incredibly helpful.' },
-            ]
-        }
     }
 ];
 
@@ -388,8 +299,11 @@ async function seed() {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(PASSWORD, salt);
 
-        // Also create a patient account
-        console.log('\n--- Creating Patient Account ---');
+        // Clear only history, keep users/providers or recreate
+        console.log('Cleaning Appointment collection...');
+        await Appointment.deleteMany({});
+
+        // Create Patient
         let patient = await User.findOne({ email: 'testuser@gmail.com' });
         if (!patient) {
             patient = await User.create({
@@ -400,88 +314,85 @@ async function seed() {
                 age: 25,
                 gender: 'Male'
             });
-            console.log('✅ Patient: testuser@gmail.com / 123456789');
-        } else {
-            console.log('⏩ Patient already exists: testuser@gmail.com');
         }
 
-        // Seed Doctors
-        console.log('\n--- Seeding 5 Doctors ---');
+        // Create Providers and History
         for (const doc of doctors) {
             let user = await User.findOne({ email: doc.email });
-            if (user) {
-                console.log(`⏩ Doctor already exists: ${doc.email}`);
-                // Update provider if exists
-                await Provider.findOneAndUpdate(
-                    { userId: user._id },
-                    { ...doc.provider, userId: user._id, type: 'doctor', name: doc.name, licenseNumber: `DOC-${Math.floor(1000 + Math.random() * 9000)}` },
-                    { upsert: true, new: true }
-                );
-                continue;
+            if (!user) {
+                user = await User.create({
+                    name: doc.name,
+                    email: doc.email,
+                    password: hashedPassword,
+                    role: 'doctor',
+                    specialization: doc.specialization,
+                    experience: doc.experience
+                });
             }
-            user = await User.create({
-                name: doc.name,
-                email: doc.email,
-                password: hashedPassword,
-                role: 'doctor',
-                specialization: doc.specialization,
-                experience: doc.experience,
-            });
-            await Provider.create({
-                userId: user._id,
-                type: 'doctor',
-                name: doc.name,
-                licenseNumber: `DOC-${Math.floor(1000 + Math.random() * 9000)}`,
-                ...doc.provider,
-            });
-            console.log(`✅ Doctor: ${doc.name} — ${doc.email} / 123456789`);
+            await Provider.findOneAndUpdate(
+                { userId: user._id },
+                { ...doc.provider, userId: user._id, type: 'doctor', name: doc.name, licenseNumber: 'SEED-DOC' },
+                { upsert: true }
+            );
+
+            // Mock History
+            for (let m = 0; m < 6; m++) {
+                const monthDate = new Date();
+                monthDate.setMonth(monthDate.getMonth() - m);
+                const count = Math.floor(12 + Math.random() * 8);
+                for (let i = 0; i < count; i++) {
+                    const apptDate = new Date(monthDate);
+                    apptDate.setDate(Math.floor(1 + Math.random() * 28));
+                    await Appointment.create({
+                        patientId: patient._id,
+                        doctorId: user._id,
+                        date: apptDate,
+                        status: 'Completed'
+                    });
+                }
+            }
         }
 
-        // Seed Test Centers
-        console.log('\n--- Seeding 5 Test Centers ---');
         for (const lab of testCenters) {
             let user = await User.findOne({ email: lab.email });
-            if (user) {
-                console.log(`⏩ Lab already exists: ${lab.email}`);
-                await Provider.findOneAndUpdate(
-                    { userId: user._id },
-                    { ...lab.provider, userId: user._id, type: 'lab', name: lab.name, licenseNumber: `LAB-${Math.floor(1000 + Math.random() * 9000)}` },
-                    { upsert: true, new: true }
-                );
-                continue;
+            if (!user) {
+                user = await User.create({
+                    name: lab.name,
+                    email: lab.email,
+                    password: hashedPassword,
+                    role: 'lab'
+                });
             }
-            user = await User.create({
-                name: lab.name,
-                email: lab.email,
-                password: hashedPassword,
-                role: 'lab',
-            });
-            await Provider.create({
-                userId: user._id,
-                type: 'lab',
-                name: lab.name,
-                licenseNumber: `LAB-${Math.floor(1000 + Math.random() * 9000)}`,
-                ...lab.provider,
-            });
-            console.log(`✅ Lab: ${lab.name} — ${lab.email} / 123456789`);
+            await Provider.findOneAndUpdate(
+                { userId: user._id },
+                { ...lab.provider, userId: user._id, type: 'lab', name: lab.name, licenseNumber: 'SEED-LAB' },
+                { upsert: true }
+            );
+
+            // Mock History
+            for (let m = 0; m < 6; m++) {
+                const monthDate = new Date();
+                monthDate.setMonth(monthDate.getMonth() - m);
+                const count = Math.floor(15 + Math.random() * 10);
+                for (let i = 0; i < count; i++) {
+                    const apptDate = new Date(monthDate);
+                    apptDate.setDate(Math.floor(1 + Math.random() * 28));
+                    await Appointment.create({
+                        patientId: patient._id,
+                        doctorId: user._id,
+                        date: apptDate,
+                        status: 'Completed',
+                        tests: [{ name: 'CBC', price: 400 }]
+                    });
+                }
+            }
         }
 
-        console.log('\n========================================');
-        console.log('         SEED COMPLETED SUCCESSFULLY    ');
-        console.log('========================================');
-        console.log('\nAll accounts use password: 123456789');
-        console.log('\nDoctor Logins:');
-        doctors.forEach(d => console.log(`  ${d.name}: ${d.email}`));
-        console.log('\nTest Center Logins:');
-        testCenters.forEach(l => console.log(`  ${l.name}: ${l.email}`));
-        console.log('\nPatient Login: testuser@gmail.com');
-        console.log('========================================\n');
-
+        console.log('Seed successful!');
+        process.exit();
     } catch (err) {
-        console.error('Seed Error:', err);
-    } finally {
-        await mongoose.disconnect();
-        console.log('Disconnected from MongoDB');
+        console.error(err);
+        process.exit(1);
     }
 }
 
