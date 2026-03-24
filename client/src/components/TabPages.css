@@ -1,0 +1,1012 @@
+/* TabPages.css — Shared styles for Doctors, Lab Tests, Pharmacies pages */
+
+.tab-page {
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Page Header */
+.tab-page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 6px;
+}
+.tab-page-header p {
+    font-size: 14px;
+    color: #94a3b8;
+    margin: 0 0 28px;
+}
+
+/* Filters */
+.tab-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.tab-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 12px 20px;
+    max-width: 500px;
+}
+.tab-search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: #0f172a;
+    background: transparent;
+}
+.tab-search-bar input::placeholder { color: #94a3b8; }
+.tab-search-bar svg { color: #94a3b8; }
+
+.tab-specialty-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.specialty-pill {
+    padding: 8px 18px;
+    border-radius: 24px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.specialty-pill.active {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+.specialty-pill:hover:not(.active) {
+    border-color: #94a3b8;
+}
+
+/* ============ DOCTORS PAGE ============ */
+.tab-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 20px;
+}
+
+.doctor-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 24px;
+    transition: 0.2s;
+}
+.doctor-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    border-color: #cbd5e1;
+}
+
+.doctor-card-top {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.doctor-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.doctor-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.doctor-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.doctor-name-row strong {
+    font-size: 16px;
+    color: #0f172a;
+}
+.avail-badge {
+    background: #dcfce7;
+    color: #16a34a;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+.doctor-specialty {
+    font-size: 13px;
+    color: #64748b;
+}
+.doctor-distance {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+.doctor-rating-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #fefce8;
+    border: 1px solid #fde68a;
+    padding: 4px 10px;
+    border-radius: 12px;
+    height: fit-content;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.doctor-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+}
+.doctor-meta {
+    display: flex;
+    gap: 16px;
+}
+.meta-reviews {
+    font-size: 12px;
+    color: #94a3b8;
+}
+.meta-fee {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+}
+.doctor-actions {
+    display: flex;
+    gap: 8px;
+}
+.btn-book, .btn-visit, .btn-compare, .btn-directions, .btn-call {
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.btn-book {
+    background: #2563eb;
+    color: white;
+}
+.btn-book:hover { background: #1d4ed8; }
+.btn-visit {
+    background: #f1f5f9;
+    color: #334155;
+}
+.btn-visit:hover { background: #e2e8f0; }
+
+/* ============ LAB TESTS PAGE ============ */
+.test-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.test-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 24px;
+    transition: 0.2s;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.test-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.test-card-left {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+}
+.test-icon-wrap {
+    width: 44px;
+    height: 44px;
+    background: #dbeafe;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.test-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.test-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.test-name-row strong {
+    font-size: 15px;
+    color: #0f172a;
+}
+.popular-tag {
+    background: #fef3c7;
+    color: #d97706;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+.test-category {
+    font-size: 12px;
+    color: #94a3b8;
+}
+.test-meta-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+.test-meta-row span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #64748b;
+}
+.home-tag {
+    color: #22c55e !important;
+    font-weight: 600;
+}
+
+.test-card-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+.test-price-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: right;
+}
+.price-range {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+.cheapest-lab {
+    font-size: 11px;
+    color: #22c55e;
+}
+.cheapest-lab strong {
+    color: #16a34a;
+}
+.test-actions {
+    display: flex;
+    gap: 8px;
+}
+.btn-compare {
+    background: #f1f5f9;
+    color: #334155;
+}
+.btn-compare:hover { background: #e2e8f0; }
+
+/* ============ PHARMACIES PAGE ============ */
+.pharmacy-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.pharmacy-map {
+    height: 500px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+.pharmacy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.pharmacy-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+    transition: 0.2s;
+}
+.pharmacy-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.pharmacy-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+.pharmacy-name-row strong {
+    font-size: 15px;
+    color: #0f172a;
+}
+.open-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+.open-badge.open {
+    background: #dcfce7;
+    color: #16a34a;
+}
+.open-badge.closed {
+    background: #fef2f2;
+    color: #ef4444;
+}
+.pharmacy-address {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+.pharmacy-meta {
+    display: flex;
+    gap: 16px;
+}
+.pharmacy-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.pharmacy-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+}
+.btn-directions {
+    background: #2563eb;
+    color: white;
+}
+.btn-directions:hover { background: #1d4ed8; }
+.btn-call {
+    background: #f1f5f9;
+    color: #334155;
+}
+.btn-call:hover { background: #e2e8f0; }
+.delivery-tag {
+    font-size: 11px;
+    color: #22c55e;
+    font-weight: 600;
+    margin-left: auto;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+    .tab-results-grid {
+        grid-template-columns: 1fr;
+    }
+    .pharmacy-layout {
+        grid-template-columns: 1fr;
+    }
+    .test-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .test-card-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+/* ============ PHARMACIES ENHANCEMENTS ============ */
+
+/* Category badges */
+.category-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.category-pharmacy {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.category-hospital {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.category-clinic {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.category-doctors {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.category-testcenter {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+/* Pill counts */
+.pill-count {
+    font-size: 11px;
+    font-weight: 400;
+    opacity: 0.7;
+    margin-left: 2px;
+}
+
+.specialty-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Map Legend */
+.map-legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.legend-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.legend-items {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Facilities loading card */
+.facilities-loading-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 32px 20px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Custom category marker styles */
+.category-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Location status styles (shared with PatientDiscovery) */
+.tab-page .location-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.tab-page .location-status.locating {
+    background: #eff6ff;
+    color: #3b82f6;
+    border: 1px solid #bfdbfe;
+}
+
+.tab-page .location-status.success {
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.tab-page .location-status.error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+/* Map loading placeholder (for pharmacy page) */
+.pharmacy-map .map-loading-placeholder {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #f8fafc;
+    border-radius: 16px;
+    min-height: 400px;
+}
+
+.pharmacy-map .map-loading-placeholder p {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* ============ DOCTOR AVATAR CIRCLE ============ */
+.doctor-avatar-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.doctor-avatar-circle.small {
+    width: 40px;
+    height: 40px;
+    font-size: 13px;
+}
+
+/* ============ DOCTOR AVAILABILITY ON CARD ============ */
+.doctor-avail-section {
+    padding: 12px 0;
+    border-top: 1px solid #f1f5f9;
+    margin-top: 8px;
+}
+
+.doctor-avail-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.doctor-avail-days {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.avail-day-dot {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    color: #cbd5e1;
+}
+
+.avail-day-dot.active {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.doctor-avail-times {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: #64748b;
+}
+
+.doctor-avail-times span {
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* ============ BOOKING MODAL ============ */
+.booking-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.booking-modal {
+    background: white;
+    border-radius: 20px;
+    width: 480px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.booking-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+.booking-close {
+    width: 32px;
+    height: 32px;
+    background: #f1f5f9;
+    border: none;
+    border-radius: 8px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.booking-doctor-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 14px;
+    margin-bottom: 20px;
+}
+
+.booking-doctor-info strong {
+    display: block;
+    font-size: 15px;
+    color: #0f172a;
+}
+
+.booking-doctor-info span {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.booking-field label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.booking-field input[type="date"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #0f172a;
+}
+
+.booking-field input[type="date"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.booking-field textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #0f172a;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.booking-field textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+/* Time Slot Grid */
+.booking-time-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.time-slot-btn {
+    padding: 8px 6px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: white;
+    font-size: 12px;
+    font-weight: 500;
+    color: #334155;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+}
+
+.time-slot-btn:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.time-slot-btn.selected {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+.no-slots-msg {
+    font-size: 13px;
+    color: #94a3b8;
+    font-style: italic;
+    text-align: center;
+    padding: 16px;
+}
+
+.booking-submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-top: 4px;
+}
+
+.booking-submit-btn:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+.booking-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.booking-error {
+    color: #dc2626;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* Booking Success */
+.booking-success {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.booking-success h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 16px 0 8px;
+}
+
+.booking-success p {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.booking-success-note {
+    font-size: 12px;
+    color: #94a3b8;
+    display: block;
+    margin-top: 4px;
+}
+
+/* Doctor Address on Card */
+.doctor-location-info {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #3b82f6;
+    margin-top: 2px;
+}
+
+.doctor-address-text {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 1px;
+}
+
+/* Booking Modal — Location Box */
+.booking-location-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f0f7ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.booking-location-box div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.booking-location-box strong {
+    font-size: 13px;
+    color: #0f172a;
+}
+
+.booking-location-box span {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.booking-directions-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: 0.2s;
+}
+
+.booking-directions-btn:hover {
+    background: #1d4ed8;
+}
+
+.booking-doc-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.booking-doc-details strong {
+    display: block;
+    font-size: 15px;
+    color: #0f172a;
+}
+
+.booking-doc-details span {
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* Booked Slot Styling */
+.time-slot-btn.booked {
+    background: #f1f5f9;
+    color: #cbd5e1;
+    border-color: #e2e8f0;
+    cursor: not-allowed;
+    position: relative;
+    text-decoration: line-through;
+}
+
+.time-slot-btn.booked:hover {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+.booked-label {
+    display: block;
+    font-size: 9px;
+    color: #dc2626;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.loading-slots-msg {
+    font-size: 13px;
+    color: #94a3b8;
+    text-align: center;
+    padding: 12px;
+}
+
+.booking-note {
+    font-size: 11px;
+    color: #94a3b8;
+    text-align: center;
+    margin-top: 6px;
+}

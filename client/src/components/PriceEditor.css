@@ -1,0 +1,264 @@
+/* PriceEditor.css — Lab Catalog Price Editor */
+
+.price-editor {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    padding: 32px;
+    max-width: 900px;
+}
+
+.pe-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+.pe-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 4px;
+}
+.pe-header p {
+    font-size: 13px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.pe-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #0E4BEF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.pe-add-btn:hover { background: #0b3bc1; }
+
+.pe-save-msg {
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    animation: fadeIn 0.3s;
+}
+
+/* Add Form */
+.pe-add-form {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+.pe-add-form h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 16px;
+}
+.pe-add-fields {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.pe-add-fields input[type="text"],
+.pe-add-fields input[type="number"] {
+    height: 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0 14px;
+    font-size: 13px;
+    color: #0f172a;
+}
+.pe-add-fields input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+.pe-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #64748b;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.pe-add-actions {
+    display: flex;
+    gap: 8px;
+}
+.pe-save, .pe-cancel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.pe-save {
+    background: #22c55e;
+    color: white;
+}
+.pe-cancel {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+/* Table */
+.pe-table {
+    width: 100%;
+}
+
+.pe-table-header {
+    display: grid;
+    grid-template-columns: 2fr 0.8fr 0.8fr 0.8fr 0.8fr;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    margin-bottom: 4px;
+}
+.pe-table-header span {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+}
+
+.pe-table-row {
+    display: grid;
+    grid-template-columns: 2fr 0.8fr 0.8fr 0.8fr 0.8fr;
+    gap: 12px;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #f1f5f9;
+    transition: 0.2s;
+}
+.pe-table-row:hover {
+    background: #f8fafc;
+}
+.pe-table-row.editing {
+    background: #eff6ff;
+    border-radius: 12px;
+    border: 1px solid #bfdbfe;
+}
+
+.pe-col-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+}
+.pe-price-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+}
+.pe-col-tat {
+    font-size: 13px;
+    color: #64748b;
+}
+.pe-col-home {
+    font-size: 13px;
+}
+
+.pe-edit-input {
+    height: 36px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0 10px;
+    font-size: 13px;
+    color: #0f172a;
+}
+.pe-edit-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.pe-toggle-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.pe-row-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.pe-icon-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.pe-icon-btn.edit {
+    background: #dbeafe;
+    color: #3b82f6;
+}
+.pe-icon-btn.edit:hover { background: #bfdbfe; }
+.pe-icon-btn.delete {
+    background: #fef2f2;
+    color: #ef4444;
+}
+.pe-icon-btn.delete:hover { background: #fecaca; }
+.pe-icon-btn.save {
+    background: #dcfce7;
+    color: #22c55e;
+}
+.pe-icon-btn.cancel {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.pe-empty {
+    text-align: center;
+    padding: 48px 0;
+    color: #94a3b8;
+}
+.pe-empty p {
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+.pe-loading {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .pe-table-header, .pe-table-row {
+        grid-template-columns: 1.5fr 0.7fr 0.6fr 0.6fr 0.6fr;
+        gap: 8px;
+    }
+    .pe-add-fields {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,12 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Appointments from './components/Appointments';
 import DoctorDashboard from './components/DoctorDashboard';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Register from './components/Register';
+import Chatbot from './components/Chatbot';
+import DashboardLayout from './components/DashboardLayout';
+import PatientDiscovery from './components/PatientDiscovery';
+import HealthVault from './components/HealthVault';
+import ProviderOnboarding from './components/ProviderOnboarding';
+import LabDashboard from './components/LabDashboard';
+import DoctorsPage from './components/DoctorsPage';
+import LabTestsPage from './components/LabTestsPage';
+import PharmaciesPage from './components/PharmaciesPage';
+import PriceEditor from './components/PriceEditor';
+import PatientQueuePage from './components/PatientQueuePage';
+import ServiceManagerPage from './components/ServiceManagerPage';
+import ReviewsPage from './components/ReviewsPage';
+import AnalyticsPage from './components/AnalyticsPage';
+import SamplesPage from './components/SamplesPage';
+import ReportsPage from './components/ReportsPage';
+import AvailabilityPage from './components/AvailabilityPage';
 import './App.css';
+import './components/Dashboard.css';
+
+const PublicHeader = () => {
+  const location = useLocation();
+  if (location.pathname !== '/') return null;
+  return (
+    <header className="public-navbar">
+      <Link to="/" className="nav-logo">CarePlus</Link>
+      <nav className="nav-links">
+        <Link to="/#marketplace">Marketplaces</Link>
+        <Link to="/#features">Features</Link>
+        <Link to="/#mission">Mission</Link>
+      </nav>
+      <div className="nav-actions">
+        <Link to="/login" className="nav-login">Login</Link>
+        <Link to="/register" className="nav-get-started">Get Started</Link>
+      </div>
+    </header>
+  );
+};
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -48,65 +85,52 @@ const App = () => {
 
   const PrivateRoute = ({ children, role }) => {
     if (!auth.token) return <Navigate to="/login" />;
-    if (role && auth.role !== role) return <Navigate to="/dashboard" />;
+    if (role && auth.role !== role && role !== 'any') return <Navigate to="/dashboard" />;
     return children;
   };
 
   return (
     <Router>
-      <div className="container">
-        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <Link to="/" style={{ textDecoration: 'none' }}><h1 style={{ color: '#00a7aa', margin: 0 }}>CarePlus Hospital</h1></Link>
-          {auth.token ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-              <span style={{ fontWeight: '600', color: '#555' }}>Hello, {auth.name} ({auth.role})</span>
-              <button className="muted" style={{ padding: '6px 12px' }} onClick={logout}>Logout</button>
-            </div>
-          ) : null}
-        </header>
+      <div className="container" style={{ maxWidth: '100%', padding: 0 }}>
+        {/* Simple Global Nav for Public pages */}
+        {!auth.token && <PublicHeader />}
 
-        {auth.token && (
-          <nav>
-            <ul>
-              {auth.role === 'patient' && (
-                <li>
-                  <Link to="/appointments">My Health Area</Link>
-                </li>
-              )}
-              {auth.role === 'doctor' && (
-                <li>
-                  <Link to="/doctor-dashboard">Doctor Portal</Link>
-                </li>
-              )}
-            </ul>
-          </nav>
-        )}
+        <Routes>
+          {/* Public Access: Only if NOT logged in */}
+          <Route path="/" element={!auth.token ? <Dashboard /> : <Navigate to="/dashboard" />} />
+          <Route path="/login" element={!auth.token ? <Login setAuth={setAuth} /> : <Navigate to="/dashboard" />} />
+          <Route path="/register" element={!auth.token ? <Register setAuth={setAuth} /> : <Navigate to="/dashboard" />} />
 
-        <div style={{ marginTop: '30px' }}>
-          <Routes>
-            {/* Public Access: Only if NOT logged in */}
-            <Route path="/" element={!auth.token ? <Dashboard /> : <Navigate to={auth.role === 'doctor' ? '/doctor-dashboard' : '/appointments'} />} />
-
-            <Route path="/login" element={!auth.token ? <Login setAuth={setAuth} /> : <Navigate to={auth.role === 'doctor' ? '/doctor-dashboard' : '/appointments'} />} />
-            <Route path="/register" element={!auth.token ? <Register setAuth={setAuth} /> : <Navigate to={auth.role === 'doctor' ? '/doctor-dashboard' : '/appointments'} />} />
-
-            {/* Role-Specific Private Routes */}
-            <Route path="/appointments" element={
-              <PrivateRoute role="patient">
-                <Appointments />
-              </PrivateRoute>
+          {/* New App Layout Routes */}
+          <Route path="/dashboard" element={<PrivateRoute role="any"><DashboardLayout role={auth.role} /></PrivateRoute>}>
+            <Route index element={
+              auth.role === 'patient' ? <PatientDiscovery /> : auth.role === 'lab' ? <LabDashboard /> : <DoctorDashboard />
             } />
+            <Route path="discovery" element={<PatientDiscovery />} />
+            <Route path="doctors" element={<DoctorsPage />} />
+            <Route path="lab-tests" element={<LabTestsPage />} />
+            <Route path="pharmacies" element={<PharmaciesPage />} />
+            <Route path="vault" element={<HealthVault />} />
+            <Route path="onboarding" element={<ProviderOnboarding />} />
+            <Route path="price-editor" element={<PriceEditor />} />
+            <Route path="queue" element={<PatientQueuePage />} />
+            <Route path="services" element={<ServiceManagerPage />} />
+            <Route path="reviews" element={<ReviewsPage />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
+            <Route path="availability" element={<AvailabilityPage />} />
+            <Route path="samples" element={<SamplesPage />} />
+            <Route path="reports" element={<ReportsPage />} />
+          </Route>
 
-            <Route path="/doctor-dashboard" element={
-              <PrivateRoute role="doctor">
-                <DoctorDashboard />
-              </PrivateRoute>
-            } />
+          {/* Legacy Fallback Paths (re-routing into new layout) */}
+          <Route path="/appointments" element={<Navigate to="/dashboard/discovery" />} />
+          <Route path="/doctor-dashboard" element={<Navigate to="/dashboard" />} />
 
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </div>
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+        
+        {auth.token && <Chatbot />}
       </div>
     </Router>
   );

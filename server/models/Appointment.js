@@ -4,8 +4,13 @@ const appointmentSchema = new mongoose.Schema({
   patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   date: { type: Date, required: true },
+  timeSlot: { type: String },  // e.g. "10:00 AM - 10:30 AM"
   symptoms: { type: String },
-  status: { type: String, default: 'Pending', enum: ['Pending', 'Confirmed', 'Cancelled', 'Completed'] }
+  status: { type: String, default: 'Pending', enum: ['Pending', 'Confirmed', 'Cancelled', 'Completed', 'Collected', 'Processing', 'Awaiting'] },
+  prescription: { type: String, default: '' },
+  report: { type: String, default: '' }, // For Lab Test results
+  tests: [{ name: String, price: Number }],
+  isReviewed: { type: Boolean, default: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);

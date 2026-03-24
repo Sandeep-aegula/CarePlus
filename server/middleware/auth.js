@@ -29,4 +29,20 @@ const isPatient = (req, res, next) => {
     }
 };
 
-module.exports = { auth, isDoctor, isPatient };
+const isLab = (req, res, next) => {
+    if (req.user && req.user.role === 'lab') {
+        next();
+    } else {
+        res.status(403).json({ msg: 'Access denied: Labs only' });
+    }
+};
+
+const isProvider = (req, res, next) => {
+    if (req.user && (req.user.role === 'doctor' || req.user.role === 'lab')) {
+        next();
+    } else {
+        res.status(403).json({ msg: 'Access denied: Providers only' });
+    }
+};
+
+module.exports = { auth, isDoctor, isPatient, isLab, isProvider };

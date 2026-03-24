@@ -1,0 +1,128 @@
+/* HealthVault.css */
+.vault-page {
+  padding: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.vault-header-block {
+  margin-bottom: 32px;
+}
+
+.vault-title { font-size: 28px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0; }
+.vault-subtitle { font-size: 16px; color: #64748b; margin: 0; }
+
+.vault-layout {
+  display: flex; gap: 32px; align-items: flex-start;
+}
+
+.vault-main { flex: 3; display: flex; flex-direction: column; gap: 32px; }
+.vault-sidebar { flex: 1; }
+
+.shadow-card {
+  background: white; border-radius: 20px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); border: 1px solid #f1f5f9; padding: 24px;
+}
+
+/* 1. Folder Grid */
+.folders-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+}
+
+.folder-card {
+  background: white; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: flex-start; transition: all 0.2s; cursor: pointer; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+.folder-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05); }
+
+.folder-icon-wrapper {
+  width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+}
+
+.bg-green { background: #dcfce7; color: #16a34a; }
+.bg-purple { background: #f3e8ff; color: #9333ea; }
+.bg-blue { background: #e0f2fe; color: #0284c7; }
+.bg-orange { background: #ffedd5; color: #ea580c; }
+
+.border-green:hover { border-color: #86efac; }
+.border-purple:hover { border-color: #d8b4fe; }
+.border-blue:hover { border-color: #7dd3fc; }
+.border-orange:hover { border-color: #fdba74; }
+
+.folder-name { font-size: 15px; font-weight: 600; color: #1e293b; margin: 0 0 4px 0; }
+.folder-count { font-size: 13px; color: #64748b; margin: 0; font-weight: 500; }
+
+
+/* 2. Recent Activity Table */
+.recent-activity-section { margin-top: 16px; }
+.section-title { font-size: 20px; font-weight: 700; color: #1e293b; margin: 0 0 20px 0; }
+
+.activity-table-wrapper { overflow-x: auto; }
+.activity-table { width: 100%; border-collapse: collapse; text-align: left; }
+.activity-table th { font-size: 13px; font-weight: 600; color: #64748b; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
+.activity-table td { padding: 16px 0; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+.activity-table tr:last-child td { border-bottom: none; }
+
+.table-doc-cell { display: flex; align-items: center; gap: 12px; }
+.cell-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
+
+.cell-icon.prescription { background: #dcfce7; color: #16a34a; }
+.cell-icon.report { background: #f3e8ff; color: #9333ea; }
+.cell-icon.bill { background: #ffedd5; color: #ea580c; }
+.cell-icon.vaccine { background: #e0f2fe; color: #0284c7; }
+
+.cell-text { display: flex; flex-direction: column; gap: 4px; }
+.cell-text strong { font-size: 14px; font-weight: 600; color: #1e293b; }
+.cell-text span { font-size: 12px; color: #64748b; }
+
+.provider-cell { font-size: 14px; font-weight: 500; color: #334155; }
+
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+.badge.verified { background: #ecfdf5; color: #059669; }
+.badge.pending { background: #fef2f2; color: #dc2626; }
+
+.btn-table-download {
+  display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;
+}
+.btn-table-download:hover { background: #f1f5f9; color: #0f172a; }
+
+/* 3. QR Code Section */
+.qr-card {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; padding: 32px; background: linear-gradient(145deg, #ffffff, #f8fafc);
+}
+
+.qr-title { font-size: 20px; font-weight: 700; color: #1e293b; margin: 0; }
+.qr-desc { font-size: 13px; color: #64748b; line-height: 1.5; margin: 0; }
+
+.qr-code-box {
+  background: white; padding: 16px; border-radius: 24px; box-shadow: 0 4px 20px -5px rgb(0 0 0 / 0.1); margin: 16px 0; color: #0f172a;
+}
+
+.qr-status {
+  display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #059669; background: #ecfdf5; padding: 6px 12px; border-radius: 9999px; border: 1px solid #d1fae5;
+}
+
+.pulse-dot {
+  width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% { transform: scale(2); opacity: 0; }
+}
+
+.btn-share-link {
+  width: 100%; border: none; background: #3b82f6; color: white; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 8px;
+}
+.btn-share-link:hover { background: #2563eb; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .vault-layout { flex-direction: column; }
+  .vault-sidebar { width: 100%; }
+}
+
+@media (max-width: 768px) {
+  .folders-grid { grid-template-columns: repeat(2, 1fr); }
+  .activity-table th:nth-child(2), .activity-table td:nth-child(2) { display: none; }
+}

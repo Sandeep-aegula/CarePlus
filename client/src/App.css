@@ -10,13 +10,14 @@
 }
 
 
-nav {
+.public-navbar nav,
+nav.public-navbar {
     background-color: #00a7aa;
     padding: 10px;
     border-radius: 10px;
 }
 
-ul {
+.public-navbar ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -24,7 +25,7 @@ ul {
     flex-wrap: wrap;
 }
 
-li {
+.public-navbar li {
     margin-right: 20px;
 }
 
@@ -35,28 +36,26 @@ nav ul li a {
 }
 
 @media (max-width: 480px) {
-    nav ul {
+    .public-navbar ul {
         gap: 8px
     }
 
-    nav {
+    .public-navbar {
         padding: 8px
     }
 }
 
-a {
-
+.public-navbar a {
     text-decoration: none;
     color: white;
     font-weight: bold;
 }
 
-a:hover {
+.public-navbar a:hover {
     color: #ffd700;
 }
 
-.active {
-
+.public-navbar .active {
     color: #ffd700;
 }
 
@@ -105,11 +104,11 @@ textarea:focus {
         padding: 16px;
     }
 
-    nav {
+    .public-navbar {
         border-radius: 6px;
     }
 
-    ul {
+    .public-navbar ul {
         gap: 8px;
     }
 
@@ -139,7 +138,7 @@ label {
     color: #222;
 }
 
-.nav-link {
+.public-navbar .nav-link {
     color: white;
 }
 
