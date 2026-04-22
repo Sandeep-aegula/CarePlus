@@ -1,8 +1,15 @@
 import React from 'react';
-import { Pill, FlaskConical, Syringe, Receipt, Download, FileText, CheckCircle2, Clock, QrCode } from 'lucide-react';
+import { Pill, FlaskConical, Syringe, Receipt, Download, FileText, CheckCircle2, Clock } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import './HealthVault.css';
 
 const HealthVault = () => {
+  const userId = localStorage.getItem('userId') || 'GUEST-ID-123';
+  const name = localStorage.getItem('userName') || 'CarePlus Patient';
+  const role = localStorage.getItem('role') || 'patient';
+
+  const qrData = `CarePlus Health Vault\n---------------------\nName: ${name}\nRole: ${role.charAt(0).toUpperCase() + role.slice(1)}\nHealth ID: ${userId}`;
+
   const folders = [
     { title: 'Prescriptions', icon: Pill, color: 'green', count: 12 },
     { title: 'Lab Reports', icon: FlaskConical, color: 'purple', count: 8 },
@@ -110,8 +117,8 @@ const HealthVault = () => {
             <h3 className="qr-title">My Health ID</h3>
             <p className="qr-desc">Show this QR code to any associated CarePlus provider to grand temporary access to your vault.</p>
             
-            <div className="qr-code-box">
-              <QrCode size={120} strokeWidth={1} />
+            <div className="qr-code-box" style={{ background: '#fff', padding: '16px', borderRadius: '16px', display: 'flex', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.05)' }}>
+              <QRCodeSVG value={qrData} size={140} level="M" includeMargin={true} />
             </div>
 
             <div className="qr-status">

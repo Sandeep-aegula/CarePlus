@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Search, Star, ShieldCheck, Stethoscope, FlaskConical, Building2, FileText, HelpCircle, AlertTriangle, MapPin, Loader2, Calendar, Clock, X, CheckCircle, Video, Home } from 'lucide-react';
@@ -56,6 +57,7 @@ const formatDistance = (km) => {
 };
 
 const PatientDiscovery = () => {
+    const navigate = useNavigate();
     const userName = localStorage.getItem('userName') || 'User';
     const [activeTab, setActiveTab] = useState('all');
     const [userLocation, setUserLocation] = useState(null);
@@ -235,7 +237,8 @@ const PatientDiscovery = () => {
                         badge: p.isVerified ? 'VERIFIED' : 'COMMUNITY',
                         badgeColor: p.isVerified ? 'green' : 'blue',
                         action: 'Book Now',
-                        actionColor: 'blue'
+                        actionColor: 'blue',
+                        link: '/dashboard/doctors'
                     }));
 
                 if (topRecs.length > 0) {
@@ -263,9 +266,9 @@ const PatientDiscovery = () => {
     }, [userLocation]);
 
     const displayRecommendations = recommendations.length > 0 ? recommendations : [
-        { name: 'Comprehensive Blood Panel', facility: 'Apex Labs', distance: '0.5km away', rating: '4.9/5', badge: 'TRUSTSCORE BADGE', badgeColor: 'blue', action: 'Book Now', actionColor: 'blue' },
-        { name: 'Annual Flu Shot', facility: 'Central Pharmacy', distance: '1.2km away', rating: '4.8/5', badge: 'VERIFIED FACILITY', badgeColor: 'green', action: 'Claim', actionColor: 'blue' },
-        { name: 'ECG Screening', facility: 'St. Mary Clinic', distance: '2.1km away', rating: '5.0/5', badge: 'TOP RATED', badgeColor: 'red', action: 'View', actionColor: 'blue' },
+        { name: 'Comprehensive Blood Panel', facility: 'Apex Labs', distance: '0.5km away', rating: '4.9/5', badge: 'TRUSTSCORE BADGE', badgeColor: 'blue', action: 'Book Now', actionColor: 'blue', link: '/dashboard/lab-tests' },
+        { name: 'Annual Flu Shot', facility: 'Central Pharmacy', distance: '1.2km away', rating: '4.8/5', badge: 'VERIFIED FACILITY', badgeColor: 'green', action: 'Claim', actionColor: 'blue', link: '/dashboard/pharmacies' },
+        { name: 'ECG Screening', facility: 'St. Mary Clinic', distance: '2.1km away', rating: '5.0/5', badge: 'TOP RATED', badgeColor: 'red', action: 'View', actionColor: 'blue', link: '/dashboard/doctors' },
     ];
 
     const mapCenter = userLocation || fallbackLocation;
@@ -524,7 +527,7 @@ const PatientDiscovery = () => {
                                     <span>{rec.facility} • {rec.distance}</span>
                                     <div className="rec-bottom">
                                         <span className={`rec-badge rec-badge-${rec.badgeColor}`}>{rec.badge}</span>
-                                        <a href="#" className="rec-action">{rec.action}</a>
+                                        <Link to={rec.link || '#'} className="rec-action">{rec.action}</Link>
                                     </div>
                                 </div>
                                 <div className="rec-rating">
@@ -533,7 +536,7 @@ const PatientDiscovery = () => {
                             </div>
                         ))}
                     </div>
-                    <button className="see-all-rec-btn">See All Recommendations</button>
+                    <button className="see-all-rec-btn" onClick={() => navigate('/dashboard/doctors')}>See All Recommendations</button>
                 </div>
             </div>
 
@@ -575,11 +578,6 @@ const PatientDiscovery = () => {
                 <p>© 2026 CarePlus Health. All rights reserved.</p>
             </div>
 
-            {/* SOS Floating Button */}
-            <div className="sos-fab">
-                <AlertTriangle size={18} color="white" />
-                <span>SOS</span>
-            </div>
 
             {/* Review Modal */}
             {showReviewModal && (
