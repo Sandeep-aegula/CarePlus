@@ -10,7 +10,10 @@ const appointmentSchema = new mongoose.Schema({
   prescription: { type: String, default: '' },
   report: { type: String, default: '' }, // For Lab Test results
   tests: [{ name: String, price: Number }],
-  isReviewed: { type: Boolean, default: false }
+  isReviewed: { type: Boolean, default: false },
+  appointmentType: { type: String, enum: ['online', 'offline'], default: 'offline' },
+  collectionType: { type: String, enum: ['home', 'center'], default: 'center' },
+  meetingLink: { type: String, default: '' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);

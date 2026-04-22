@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Users, ShieldCheck, DollarSign, FileText, Edit3, Plus, Star, Calendar } from 'lucide-react';
+import { Users, ShieldCheck, DollarSign, FileText, Edit3, Plus, Star, Calendar, Video } from 'lucide-react';
 import './DoctorDashboard.css';
 
 const DoctorDashboard = () => {
@@ -179,6 +179,15 @@ const DoctorDashboard = () => {
                                             </>
                                         ) : (
                                             <>
+                                                {appt.appointmentType === 'online' && appt.meetingLink && (
+                                                    <button 
+                                                        className="q-btn q-accept" 
+                                                        onClick={() => window.open(appt.meetingLink, '_blank')}
+                                                        style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#3b82f6', color: 'white', border: 'none' }}
+                                                    >
+                                                        <Video size={14} /> Video
+                                                    </button>
+                                                )}
                                                 <button className="q-btn q-start" onClick={() => handleOpenCompleteModal(appt)}>Complete</button>
                                                 <button className="q-btn q-noshow" onClick={() => updateStatus(appt._id, 'Cancelled')}>No Show</button>
                                             </>

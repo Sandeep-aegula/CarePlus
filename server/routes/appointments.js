@@ -96,14 +96,20 @@ router.post('/add', auth, async (req, res) => {
       }
     }
 
+    const apptType = (req.body.appointmentType || 'offline').toLowerCase();
+    const collType = (req.body.collectionType || 'center').toLowerCase();
+
     const newAppointment = new Appointment({
       patientId: req.user.id,
       doctorId,
       date,
-      symptoms,
+      symptoms: symptoms || (tests && tests.length > 0 ? 'Lab Test' : 'General Checkup'),
       timeSlot,
       tests: tests || [],
-      status: 'Pending'
+      status: 'Pending',
+      appointmentType: apptType,
+      collectionType: collType,
+      meetingLink: apptType === 'online' ? `https://meet.jit.si/CarePlus-${Math.random().toString(36).substr(2, 9)}` : ''
     });
 
     const saved = await newAppointment.save();
@@ -135,7 +141,7 @@ router.post('/update/:id', auth, async (req, res) => {
       return res.status(401).json('Unauthorized');
     }
 
-    const { date, symptoms, status, prescription, tests, report } = req.body;
+    const { date, symptoms, status, prescription, tests, report, appointmentType, collectionType, meetingLink } = req.body;
     if (date) appointment.date = date;
     if (symptoms) appointment.symptoms = symptoms;
     if (status) appointment.status = status;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, FlaskConical, Clock, Home, ArrowRight, X, Calendar, MapPin, CheckCircle } from 'lucide-react';
+import { Search, FlaskConical, Clock, Home, ArrowRight, X, Calendar, MapPin, CheckCircle, Video } from 'lucide-react';
 import './TabPages.css';
 
 const LabTestsPage = () => {
@@ -19,6 +19,7 @@ const LabTestsPage = () => {
     const [availableLabs, setAvailableLabs] = useState([]);
     const [selectedLabId, setSelectedLabId] = useState('');
     const [loadingLabs, setLoadingLabs] = useState(false);
+    const [collectionType, setCollectionType] = useState('center'); // home or center
     const [userLocation, setUserLocation] = useState(null);
 
     const categories = ['All', 'Blood Tests', 'Imaging', 'Thyroid', 'Diabetes', 'Cardiac', 'Vitamin'];
@@ -119,11 +120,12 @@ const LabTestsPage = () => {
             ];
 
             await axios.post('/appointments/add', {
-                doctorId: selectedLabId, // Lab mapped to doctorId
+                doctorId: selectedLabId, 
                 date: bookingDate,
                 symptoms: `Lab Test Booking`,
-                timeSlot: '10:00 AM - 11:00 AM', // Generic slot for Home Collection or Walk-in window
-                tests: allTestsToBook
+                timeSlot: '10:00 AM - 11:00 AM', 
+                tests: allTestsToBook,
+                collectionType // Send collection type
             }, {
                 headers: { 'x-auth-token': token }
             });
@@ -256,6 +258,31 @@ const LabTestsPage = () => {
                                             }
                                         </select>
                                     </div>
+                                </div>
+
+                                <div className="booking-field">
+                                    <label>Sample Collection Mode</label>
+                                    <div className="booking-mode-toggle" style={{ marginBottom: '16px' }}>
+                                        <button 
+                                            className={`mode-btn ${collectionType === 'center' ? 'active' : ''}`}
+                                            onClick={() => setCollectionType('center')}
+                                        >
+                                            <MapPin size={16} /> Visit Lab
+                                        </button>
+                                        <button 
+                                            className={`mode-btn ${collectionType === 'home' ? 'active' : ''}`}
+                                            onClick={() => setCollectionType('home')}
+                                            disabled={bookingTest.category === 'Imaging'}
+                                            title={bookingTest.category === 'Imaging' ? 'Home collection not available for imaging' : ''}
+                                        >
+                                            <Home size={16} /> Home Collection
+                                        </button>
+                                    </div>
+                                    {bookingTest.category === 'Imaging' && (
+                                        <p style={{ fontSize: '11px', color: '#94a3b8', marginTop: '-12px', marginBottom: '12px' }}>
+                                            * MRI/Imaging requires visiting the diagnostic center.
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="booking-form">

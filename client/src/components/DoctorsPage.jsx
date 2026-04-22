@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, Star, MapPin, Calendar, Clock, X, CheckCircle, Navigation } from 'lucide-react';
+import { Search, Star, MapPin, Calendar, Clock, X, CheckCircle, Navigation, Video, User } from 'lucide-react';
 import './TabPages.css';
 
 const DoctorsPage = () => {
@@ -19,7 +19,17 @@ const DoctorsPage = () => {
     const [submitting, setSubmitting] = useState(false);
     const [bookedSlots, setBookedSlots] = useState([]);
     const [loadingSlots, setLoadingSlots] = useState(false);
+    const [bookingType, setBookingType] = useState('offline'); // online or offline
     
+    const openBookingModal = (doc) => {
+        setBookingDoctor(doc);
+        setBookingStatus(null);
+        setBookingError('');
+        setBookedSlots([]);
+        setBookingDate('');
+        setBookingTime('');
+        setBookingType('offline'); // Reset for new selection
+    };
     // User location state for directions
     const [userLocation, setUserLocation] = useState(null);
 
@@ -60,12 +70,28 @@ const DoctorsPage = () => {
         const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
         const daySlots = doctor.availability.filter(a => a.day === dayName);
 
+        const isToday = new Date().toISOString().split('T')[0] === dateStr;
+        const now = new Date();
+        const currentH = now.getHours();
+        const currentM = now.getMinutes();
+
         const slots = [];
         daySlots.forEach(slot => {
             const [startH, startM] = slot.startTime.split(':').map(Number);
             const [endH, endM] = slot.endTime.split(':').map(Number);
             let h = startH, m = startM;
             while (h < endH || (h === endH && m < endM)) {
+                // If today, skip slots that have already started or are about to start
+                if (isToday) {
+                    if (h < currentH || (h === currentH && m <= currentM)) {
+                        // Skip this slot
+                        const fromH = h, fromM = m;
+                        m += 30;
+                        if (m >= 60) { h++; m = 0; }
+                        continue;
+                    }
+                }
+
                 const fromH = h, fromM = m;
                 m += 30;
                 if (m >= 60) { h++; m = 0; }
@@ -120,6 +146,7 @@ const DoctorsPage = () => {
                 date: bookingDate,
                 timeSlot: bookingTime,
                 symptoms: bookingSymptoms,
+                appointmentType: bookingType, // Add appointment type
             }, { headers: { 'x-auth-token': token } });
             setBookingStatus('success');
             setTimeout(() => {
@@ -127,6 +154,7 @@ const DoctorsPage = () => {
                 setBookingDate('');
                 setBookingTime('');
                 setBookingSymptoms('');
+                setBookingType('offline');
                 setBookingStatus(null);
                 setBookedSlots([]);
             }, 2500);
@@ -242,7 +270,7 @@ const DoctorsPage = () => {
                                         <span className="meta-fee">₹{doc.consultationFee || 'N/A'} </span>
                                     </div>
                                     <div className="doctor-actions">
-                                        <button className="btn-book" onClick={() => { setBookingDoctor(doc); setBookingStatus(null); setBookingError(''); setBookedSlots([]); setBookingDate(''); setBookingTime(''); }}>Book Now</button>
+                                        <button className="btn-book" onClick={() => openBookingModal(doc)}>Book Now</button>
                                     </div>
                                 </div>
                             </div>
@@ -307,6 +335,25 @@ const DoctorsPage = () => {
                                     </div>
                                 )}
 
+                                <div className="booking-field">
+                                    <label>Consultation Mode</label>
+                                    <div className="booking-mode-toggle" style={{ marginBottom: '16px' }}>
+                                        <button 
+                                            type="button"
+                                            className={`mode-btn ${bookingType === 'offline' ? 'active' : ''}`}
+                                            onClick={(e) => { e.preventDefault(); setBookingType('offline'); }}
+                                        >
+                                            <User size={16} /> In-Person
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            className={`mode-btn ${bookingType === 'online' ? 'active' : ''}`}
+                                            onClick={(e) => { e.preventDefault(); setBookingType('online'); }}
+                                        >
+                                            <Video size={16} /> Video Call
+                                        </button>
+                                    </div>
+                                </div>
                                 <div className="booking-form">
                                     <div className="booking-field">
                                         <label><Calendar size={14} /> Select Date</label>

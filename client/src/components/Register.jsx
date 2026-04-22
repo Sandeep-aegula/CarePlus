@@ -287,7 +287,7 @@ const Register = ({ setAuth }) => {
             <footer className="register-footer">
                 <div className="reg-footer-left">
                     <strong>CarePlus</strong>
-                    <span>© 2024 CarePlus Health. All rights reserved.</span>
+                    <span>© 2026 CarePlus Health. All rights reserved.</span>
                 </div>
                 <div className="reg-footer-right">
                     <a href="#">Privacy Policy</a>

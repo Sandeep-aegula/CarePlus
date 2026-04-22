@@ -73,7 +73,7 @@ const Login = ({ setAuth }) => {
                         <span>Trusted by 50,000+ users worldwide</span>
                     </div>
                     <div className="footer-copyright">
-                        © 2024 CAREPLUS HEALTH. THE DIGITAL SANCTUARY.
+                        © 2026 CAREPLUS HEALTH. THE DIGITAL SANCTUARY.
                     </div>
                 </div>
             </div>

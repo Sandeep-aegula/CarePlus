@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Users, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { Users, Clock, CheckCircle, XCircle, AlertCircle, Video } from 'lucide-react';
 import './DoctorDashboard.css';
 
 const PatientQueuePage = () => {
@@ -114,7 +114,18 @@ const PatientQueuePage = () => {
                                     </>
                                 )}
                                 {appt.status === 'Confirmed' && (
-                                    <button className="q-btn q-noshow" onClick={() => updateStatus(appt._id, 'Cancelled')}>End Session</button>
+                                    <>
+                                        {appt.appointmentType === 'online' && appt.meetingLink && (
+                                            <button 
+                                                className="q-btn q-start" 
+                                                onClick={() => window.open(appt.meetingLink, '_blank')}
+                                                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                                            >
+                                                <Video size={14} /> Join Video
+                                            </button>
+                                        )}
+                                        <button className="q-btn q-noshow" onClick={() => updateStatus(appt._id, 'Cancelled')}>End Session</button>
+                                    </>
                                 )}
                             </div>
                         </div>

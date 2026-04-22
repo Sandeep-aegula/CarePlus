@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Search, Star, ShieldCheck, Stethoscope, FlaskConical, Building2, FileText, HelpCircle, AlertTriangle, MapPin, Loader2, Calendar, Clock, X, CheckCircle } from 'lucide-react';
+import { Search, Star, ShieldCheck, Stethoscope, FlaskConical, Building2, FileText, HelpCircle, AlertTriangle, MapPin, Loader2, Calendar, Clock, X, CheckCircle, Video, Home } from 'lucide-react';
 import './PatientDiscovery.css';
 import axios from 'axios';
 
@@ -340,6 +340,22 @@ const PatientDiscovery = () => {
                                         <strong>{appt.doctorId?.role === 'lab' ? (appt.doctorId.name) : (appt.doctorId?.name ? (appt.doctorId.name.startsWith('Dr.') ? appt.doctorId.name : `Dr. ${appt.doctorId.name}`) : 'Doctor')}</strong>
                                         <span className="appt-specialty">{appt.doctorId?.specialization || (appt.doctorId?.role === 'lab' ? 'Diagnostic Center' : 'General')}</span>
                                         {appt.symptoms && <span className="appt-symptoms">{appt.symptoms}</span>}
+                                        <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                                            {appt.appointmentType === 'online' ? (
+                                                <span style={{ fontSize: '10px', background: '#eff6ff', color: '#3b82f6', padding: '2px 8px', borderRadius: '10px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                    <Video size={10} /> Video Consultation
+                                                </span>
+                                            ) : (
+                                                <span style={{ fontSize: '10px', background: '#f1f5f9', color: '#64748b', padding: '2px 8px', borderRadius: '10px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                    <MapPin size={10} /> In-Person Visit
+                                                </span>
+                                            )}
+                                            {appt.collectionType === 'home' && (
+                                                <span style={{ fontSize: '10px', background: '#f0fdf4', color: '#16a34a', padding: '2px 8px', borderRadius: '10px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                    <Home size={10} /> Home Collection
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="appt-right">
                                         <span className="appt-status-badge" style={{ background: ss.bg, color: ss.color }}>
@@ -364,6 +380,14 @@ const PatientDiscovery = () => {
                                                 style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', fontSize: '12px', background: '#10b981', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', marginTop: '8px' }}
                                             >
                                                 <FileText size={14} /> Download Report
+                                            </button>
+                                        )}
+                                        {appt.appointmentType === 'online' && appt.status === 'Confirmed' && appt.meetingLink && (
+                                            <button 
+                                                onClick={() => window.open(appt.meetingLink, '_blank')}
+                                                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', fontSize: '12px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', marginTop: '8px' }}
+                                            >
+                                                <Video size={14} /> Join Video Call
                                             </button>
                                         )}
                                     </div>
@@ -548,7 +572,7 @@ const PatientDiscovery = () => {
                     <a href="#">Contact Support</a>
                     <a href="#">Legal</a>
                 </div>
-                <p>© 2024 CarePlus Health. All rights reserved.</p>
+                <p>© 2026 CarePlus Health. All rights reserved.</p>
             </div>
 
             {/* SOS Floating Button */}

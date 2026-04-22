@@ -186,7 +186,7 @@ const Dashboard = () => {
                         <a href="#">CONTACT SUPPORT</a>
                         <a href="#">ACCESSIBILITY</a>
                     </div>
-                    <span className="footer-copyright">© 2024 CAREPLUS HEALTH. THE DIGITAL SANCTUARY.</span>
+                    <span className="footer-copyright">© 2026 CAREPLUS HEALTH. THE DIGITAL SANCTUARY.</span>
                 </div>
             </footer>
         </div>
